@@ -1,5 +1,6 @@
 import { Helmet } from "react-helmet-async";
 import Banner from "../components/home/Banner";
+import AllTags from "../components/home/AllTags";
 
 const Home = () => {
   return (
@@ -9,6 +10,7 @@ const Home = () => {
       </Helmet>
 
       <Banner />
+      <AllTags />
     </main>
   );
 };
