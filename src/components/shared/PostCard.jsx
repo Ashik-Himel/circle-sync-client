@@ -12,16 +12,16 @@ const PostCard = ({post}) => {
         </div>
         <div>
           <h4 className='text-[18px] font-semibold'>Author: {post.author.name}</h4>
-          <span className='text-gray-500'>Published on: {format(new Date(post.publishedTime), 'dd MMM, yyyy p')}</span>
+          <span className='text-gray-500'>{format(new Date(post.publishedTime), 'dd MMM, yyyy p')}</span>
         </div>
       </div>
       
       <div className='p-4'>
         <h3 className='text-2xl font-medium mb-4'>{post.title}</h3>
         
-        <div className='flex justify-between items-center gap-4'>
+        <div className='flex flex-wrap justify-between items-center gap-4'>
           <span className='text-gray-500'>Tag: {post.tag}</span>
-          <PostStateComponent upVote={post.upVote} downVote={post.downVote} postId={post._id} />
+          <PostStateComponent upVote={post.upVote} downVote={post.downVote} postId={post._id} showShare={false} />
         </div>
       </div>
     </Link>

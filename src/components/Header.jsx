@@ -19,7 +19,7 @@ const Header = () => {
   })
 
   return (
-    <header className='py-4 border-b'>
+    <header className='py-4 border-b-2 border-gray-300 fixed left-0 right-0 top-0 bg-white z-50'>
       <div className="container">
         <nav className='flex justify-between items-center gap-4'>
           <Link to='/' className='flex justify-center items-center gap-2'>
@@ -28,7 +28,7 @@ const Header = () => {
           </Link>
 
           <ul className='flex justify-center items-center gap-4 sm:gap-6'>
-            <div className='flex flex-col md:flex-row justify-center items-center gap-6 fixed md:static top-0 bottom-0 text-xl md:text-base w-4/5 max-w-[280px] md:w-auto md:max-w-none bg-white border-s-2 border-primary md:bg-none md:border-none z-50 transition-[right] duration-300 md:transition-none' style={drawerShow ? {right: '0px'} : {right: '-300px'}}>
+            <div className='flex flex-col md:flex-row justify-center items-center gap-6 fixed md:static top-0 bottom-0 text-xl md:text-base w-4/5 max-w-[280px] md:w-auto md:max-w-none bg-white border-s-2 border-primary md:bg-none md:border-none z-40 transition-[right] duration-300 md:transition-none' style={drawerShow ? {right: '0px'} : {right: '-300px'}}>
               <FaCircleXmark className='text-3xl cursor-pointer select-none absolute left-6 top-6 md:hidden' onClick={() => setDrawerShow(false)} />
               <li>
                 <NavLink to='/' className={({isActive}) => isActive ? 'font-medium text-primary' : ''} onClick={() => setDrawerShow(false)}>Home</NavLink>
