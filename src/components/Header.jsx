@@ -3,10 +3,20 @@ import { FaBell, FaBars } from 'react-icons/fa';
 import { FaCircleXmark } from 'react-icons/fa6';
 import useUserContext from '../hooks/useUserContext';
 import { useState } from 'react';
+import useAxiosPublic from '../hooks/useAxiosPublic';
+import { useQuery } from '@tanstack/react-query';
 
 const Header = () => {
   const {user, userLoaded} = useUserContext();
   const [drawerShow, setDrawerShow] = useState(false);
+  const axiosPublic = useAxiosPublic();
+  const {data: announcementCount = 0} = useQuery({
+    queryKey: ['announcements', 'count'],
+    queryFn: async() => {
+      const res = await axiosPublic('/announcements/count');
+      return res.data;
+    }
+  })
 
   return (
     <header className='py-4 border-b'>
@@ -29,7 +39,7 @@ const Header = () => {
               <li>
                 <div className='relative mt-3 md:mt-0 md:mr-3'>
                   <FaBell className='text-2xl' />
-                  <span className="badge badge-primary text-white font-bold absolute bottom-[calc(100%-10px)] left-[calc(100%-15px)] text-sm">0</span>
+                  <span className="badge badge-primary text-white font-bold absolute bottom-[calc(100%-10px)] left-[calc(100%-15px)] text-sm">{announcementCount}</span>
                 </div>
               </li>
             </div>

@@ -17,7 +17,7 @@ const AllTags = () => {
       <div className="container">
         <SectionHeader heading="All Tags" subHeading="You can search posts with those tags" />
 
-        <div className="flex justify-center items-center gap-2 w-full max-w-[700px] mx-auto">
+        <div className="flex flex-wrap justify-center items-center gap-2 w-full max-w-[700px] mx-auto">
           {
             !isLoading ? allTags?.map(tag => <span key={tag._id} className="inline-block bg-primary text-white px-4 py-2 rounded-full font-medium">{tag.tag}</span>) : <div className="text-center">
               <span className="loading loading-spinner loading-lg"></span>
