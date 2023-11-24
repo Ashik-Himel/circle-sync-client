@@ -1,6 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 import useAxiosPublic from "../../hooks/useAxiosPublic";
 import SectionHeader from "../shared/SectionHeader";
+import LoadingComponent from "../shared/LoadingComponent";
 
 const AllTags = () => {
   const axiosPublic = useAxiosPublic();
@@ -19,9 +20,7 @@ const AllTags = () => {
 
         <div className="flex flex-wrap justify-center items-center gap-2 w-full max-w-[700px] mx-auto">
           {
-            !isLoading ? allTags?.map(tag => <span key={tag._id} className="inline-block bg-primary text-white px-4 py-2 rounded-full font-medium">{tag.tag}</span>) : <div className="text-center">
-              <span className="loading loading-spinner loading-lg"></span>
-            </div>
+            !isLoading ? allTags?.map(tag => <span key={tag._id} className="inline-block bg-primary text-white px-4 py-2 rounded-full font-medium">{tag.tag}</span>) : <LoadingComponent />
           }
         </div>
       </div>

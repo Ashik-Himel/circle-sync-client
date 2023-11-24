@@ -6,6 +6,7 @@ import Membership from '../pages/Membership';
 import PrivateRoutesAlt from '../manageRoutes/PrivateRoutesAlt';
 import Login from '../pages/Login';
 import Register from '../pages/Register';
+import PostDetails from '../pages/PostDetails';
 
 export const router = createBrowserRouter([
   {
@@ -16,6 +17,10 @@ export const router = createBrowserRouter([
       {
         path: '/',
         element: <Home />
+      },
+      {
+        path: '/posts/:id',
+        element: <PostDetails />
       },
       {
         path: '/membership',
