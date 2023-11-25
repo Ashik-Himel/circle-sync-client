@@ -5,10 +5,14 @@ import useUserContext from '../hooks/useUserContext';
 import { useState } from 'react';
 import useAxiosPublic from '../hooks/useAxiosPublic';
 import { useQuery } from '@tanstack/react-query';
+import { signOut } from 'firebase/auth';
+import { auth } from '../firebase.config';
+import toast from 'react-hot-toast';
 
 const Header = () => {
   const {user, userLoaded} = useUserContext();
   const [drawerShow, setDrawerShow] = useState(false);
+  const [profileShow, setProfileShow] = useState();
   const axiosPublic = useAxiosPublic();
   const {data: announcementCount = 0} = useQuery({
     queryKey: ['announcements', 'count'],
@@ -18,10 +22,20 @@ const Header = () => {
     }
   })
 
+  const handleLogout = () => {
+    signOut(auth)
+      .then(() => {
+        toast.success('Logout Successful !!!');
+      })
+      .catch(error => {
+        toast.error(error.code);
+      })
+  }
+
   return (
     <header className='py-4 border-b-2 border-gray-300 fixed left-0 right-0 top-0 bg-white z-50'>
       <div className="container">
-        <nav className='flex justify-between items-center gap-4'>
+        <nav className='relative flex justify-between items-center gap-4'>
           <Link to='/' className='flex justify-center items-center gap-2'>
             <img className='w-6 sm:w-8' src="/favicon.png" alt="Brand Icon" />
             <span className='text-2xl sm:text-3xl font-medium'>Circle<span className='text-primary'>Sync</span></span>
@@ -34,7 +48,7 @@ const Header = () => {
                 <NavLink to='/' className={({isActive}) => isActive ? 'font-medium text-primary' : ''} onClick={() => setDrawerShow(false)}>Home</NavLink>
               </li>
               <li>
-                <NavLink to='/membership' className={({isActive}) => isActive ? 'font-bold text-primary' : ''} onClick={() => setDrawerShow(false)}>Membership</NavLink>
+                <NavLink to='/membership' className={({isActive}) => isActive ? 'font-medium text-primary' : ''} onClick={() => setDrawerShow(false)}>Membership</NavLink>
               </li>
               <li>
                 <div className='relative mt-3 md:mt-0 md:mr-3'>
@@ -45,8 +59,19 @@ const Header = () => {
             </div>
             <li>
               {
-                userLoaded ? user ? <div>
-                  <img className='w-10 h-10 rounded-full border-2 border-primary' src={user?.photoURL} alt="User's Photo" />
+                userLoaded ? user ? <div className="flex justify-center items-center gap-2">
+                  <div className="relative group peer cursor-pointer">
+                    <img className="w-10 h-10 rounded-full select-none" onClick={() => setProfileShow(!profileShow)} src={user?.photoURL} alt="User's Photo" />
+                    <span className="w-7 h-7 bg-white rotate-45 absolute top-[calc(100%+8px)] left-1/2 -translate-x-1/2 z-10" style={profileShow ? {display: "block"} : {display: "none"}}></span>
+                  </div>
+                  <div className="flex-col justify-center items-center bg-white p-6 rounded-lg absolute top-[calc(100%+1rem)] right-0 w-full max-w-[320px] [box-shadow:0px_10px_40px_5px_rgba(0,0,0,0.3)]" style={profileShow ? {display: "flex"} : {display: "none"}}>
+                    <img className="w-20 h-20 rounded-full mb-4 z-20" src={user?.photoURL} alt="User's Photo" />
+                    <span className="text-[18px] font-medium mb-1">{user?.displayName}</span>
+                    <div className='flex justify-center items-center gap-2 mt-4'>
+                      <Link to='' className='btn btn-primary' onClick={() => setProfileShow(false)}>Dashboard</Link>
+                      <button className="btn btn-error text-white" onClick={() => {handleLogout(), setProfileShow(false)}}>Logout</button>
+                    </div>
+                  </div>
                 </div> : <Link className='btn btn-primary text-sm sm:text-base' to='/login'>Join Us</Link> : <div>
                   <span className="loading loading-spinner loading-md"></span>
                 </div>
