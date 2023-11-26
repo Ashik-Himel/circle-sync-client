@@ -74,7 +74,7 @@ const PostDetails = () => {
                 }
               </div>
 
-              <AddCommentCard postTitle={post.title} postId={post._id} refetch={refetch} />
+              <AddCommentCard postTitle={post.title} postId={post._id} postAuthorEmail={post.author?.email} refetch={refetch} />
             </div>
           </div>
         </div>

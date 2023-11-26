@@ -20,10 +20,10 @@ const ContextProvider = ({children}) => {
         axiosPublic.post('/users', {email: user?.email, setToken: false}, {withCredentials: true})
           .then(res => {
             setUserRole(res.data?.role);
-            setUserLoaded(true);
           })
           .catch(error => toast.error(error.message))
       }
+      setUserLoaded(true);
     });
     return () => unSubscribe(); 
   }, [axiosPublic]);

@@ -17,9 +17,9 @@ const Header = () => {
   const axiosPublic = useAxiosPublic();
   const axiosSecure = useAxiosSecure();
   const {data: announcementCount = 0} = useQuery({
-    queryKey: ['announcements', 'count'],
+    queryKey: ['announcementsCount'],
     queryFn: async() => {
-      const res = await axiosPublic('/announcements/count');
+      const res = await axiosPublic('/announcementsCount');
       return res.data;
     }
   })
@@ -75,7 +75,7 @@ const Header = () => {
                     <img className="w-20 h-20 rounded-full mb-4 z-20" src={user?.photoURL} alt="User's Photo" />
                     <span className="text-[18px] font-medium mb-1">{user?.displayName}</span>
                     <div className='flex justify-center items-center gap-2 mt-4'>
-                      <Link to='' className='btn btn-primary' onClick={() => setProfileShow(false)}>Dashboard</Link>
+                      <Link to='/dashboard/stat' className='btn btn-primary' onClick={() => setProfileShow(false)}>Dashboard</Link>
                       <button className="btn btn-error text-white" onClick={() => {handleLogout(), setProfileShow(false)}}>Logout</button>
                     </div>
                   </div>

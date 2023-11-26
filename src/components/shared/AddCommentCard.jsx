@@ -5,7 +5,7 @@ import PropTypes from 'prop-types';
 import useAxiosSecure from "../../hooks/useAxiosSecure";
 import Swal from "sweetalert2";
 
-const AddCommentCard = ({postTitle, postId, refetch}) => {
+const AddCommentCard = ({postTitle, postId, postAuthorEmail, refetch}) => {
   const {user, userLoaded} = useUserContext();
   const {pathname} = useLocation();
   const axiosSecure = useAxiosSecure();
@@ -20,7 +20,7 @@ const AddCommentCard = ({postTitle, postId, refetch}) => {
       email: user?.email,
       photo: user?.photoURL,
     };
-    const data = {postTitle, postId, comment, time, author}
+    const data = {postTitle, postId, postAuthorEmail, comment, time, author}
 
     axiosSecure.post('/comments', data)
       .then((res) => {
@@ -59,5 +59,6 @@ export default AddCommentCard;
 AddCommentCard.propTypes = {
   postTitle: PropTypes.string,
   postId: PropTypes.string,
+  postAuthorEmail: PropTypes.string,
   refetch: PropTypes.func
 }

@@ -2,6 +2,11 @@
 @tailwind components;
 @tailwind utilities;
 
+@layer base {
+  main {
+    @apply pt-[73px];
+  }
+}
 @layer components {
   .btn {
     @apply text-base h-auto min-h-[40px];
@@ -9,4 +14,8 @@
   .btn-primary {
     @apply text-white;
   }
+}
+
+.css-13cymwt-control, .css-t3ipsp-control {
+  @apply py-[4.5px];
 }
