@@ -7,6 +7,7 @@ import PrivateRoutesAlt from '../manageRoutes/PrivateRoutesAlt';
 import Login from '../pages/Login';
 import Register from '../pages/Register';
 import PostDetails from '../pages/PostDetails';
+import PrivateRoutes from '../manageRoutes/PrivateRoutes';
 
 export const router = createBrowserRouter([
   {
@@ -24,7 +25,7 @@ export const router = createBrowserRouter([
       },
       {
         path: '/membership',
-        element: <Membership />
+        element: <PrivateRoutes><Membership /></PrivateRoutes>
       },
       {
         path: '/login',

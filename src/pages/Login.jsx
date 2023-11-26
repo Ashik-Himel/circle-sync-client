@@ -1,17 +1,21 @@
 import { Helmet } from "react-helmet-async";
 import googleIcon from '../assets/images/google.png';
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import {FaEye, FaEyeSlash} from 'react-icons/fa';
 import { useState } from "react";
 import toast from "react-hot-toast";
 import { GoogleAuthProvider, signInWithEmailAndPassword, signInWithPopup } from "firebase/auth";
 import { auth } from "../firebase.config";
 import useUserContext from "../hooks/useUserContext";
+import useAxiosPublic from "../hooks/useAxiosPublic";
+import Swal from "sweetalert2";
 
 const Login = () => {
   const [showEye, setShowEye] = useState(true);
   const [showPass, setShowPass] = useState(false);
-  const {setUser} = useUserContext();
+  const {setUser, setUserRole} = useUserContext();
+  const axiosPublic = useAxiosPublic();
+  const {state} = useLocation();
 
   const handleSubmit = e => {
     e.preventDefault();
@@ -22,23 +26,37 @@ const Login = () => {
 
     signInWithEmailAndPassword(auth, email, password)
       .then((userCredential) => {
-        setUser(userCredential.user)
-        toast.success("Login Successful !!!");
+        axiosPublic.post('/users', {email}, {withCredentials: true})
+          .then(res => {
+            toast.success('Login Successful !!!');
+            setUser(userCredential.user);
+            setUserRole(res.data?.role);
+          })
+          .catch(error => toast.error(error.message))
       })
-      .catch((error) => {
-        toast.error(error.message);
-      })
+      .catch((error) => toast.error(error.message))
   }
   const googleLogin = () => {
     const googleProvider = new GoogleAuthProvider();
     signInWithPopup(auth, googleProvider)
       .then((userCredential) => {
-        setUser(userCredential.user)
-        toast.success('Login Successful !!!');
+        axiosPublic.post('/users', {email: userCredential.user?.email}, {withCredentials: true})
+          .then(res => {
+            if (res.data.insertedId) {
+              Swal.fire({
+                title: "Congrats!",
+                text: "You earned bronze badge!",
+                icon: "success"
+              });
+              setUserRole("bronze");
+            } else {
+              toast.success('Login Successful !!!');
+            }
+            setUser(userCredential.user);
+          })
+          .catch(error => toast.error(error.message));
       })
-      .catch(error => {
-        toast.error(error.code);
-      })
+      .catch(error => toast.error(error.message));
   }
   const handlePassOnChange = e => {
     const password = e.target.value;
@@ -68,7 +86,7 @@ const Login = () => {
             </div>
 
             <button className="btn btn-primary btn-block mt-6" type="submit">Login</button>
-            <p className="mt-4">Don&apos;t have an account? <Link to='/register' className="text-primary font-medium">Register Now</Link></p>
+            <p className="mt-4">Don&apos;t have an account? <Link to='/register' className="text-primary font-medium" state={state}>Register Now</Link></p>
             <div className="divider py-4">OR</div>
             <button type="button" className="w-full border-2 border-black rounded-full flex justify-center items-center gap-4 py-2 px-4 font-medium" onClick={googleLogin}>
               <img className="w-6" src={googleIcon} alt="Google Icon" />

@@ -8,12 +8,14 @@ import { useQuery } from '@tanstack/react-query';
 import { signOut } from 'firebase/auth';
 import { auth } from '../firebase.config';
 import toast from 'react-hot-toast';
+import useAxiosSecure from '../hooks/useAxiosSecure';
 
 const Header = () => {
   const {user, userLoaded} = useUserContext();
   const [drawerShow, setDrawerShow] = useState(false);
   const [profileShow, setProfileShow] = useState();
   const axiosPublic = useAxiosPublic();
+  const axiosSecure = useAxiosSecure();
   const {data: announcementCount = 0} = useQuery({
     queryKey: ['announcements', 'count'],
     queryFn: async() => {
@@ -25,7 +27,12 @@ const Header = () => {
   const handleLogout = () => {
     signOut(auth)
       .then(() => {
-        toast.success('Logout Successful !!!');
+        axiosSecure('/logout', {withCredentials: true})
+          .then((res) => {
+            if (res.data) {
+              toast.success('Logout Successful !!!');
+            }
+          })
       })
       .catch(error => {
         toast.error(error.code);

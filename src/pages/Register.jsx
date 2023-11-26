@@ -5,15 +5,19 @@ import { GoogleAuthProvider, createUserWithEmailAndPassword, signInWithPopup, up
 import { auth } from "../firebase.config";
 import toast from "react-hot-toast";
 import {FaEye, FaEyeSlash} from 'react-icons/fa';
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import googleIcon from '../assets/images/google.png';
+import useAxiosPublic from "../hooks/useAxiosPublic";
+import Swal from "sweetalert2";
 
 const Register = () => {
-  const {setUser} = useUserContext();
+  const {setUser, setUserRole} = useUserContext();
   const [showPass, setShowPass] = useState(false);
   const [showEye, setShowEye] = useState(false);
   const [isActive, setIsActive] = useState(false);
   const [errorMsg, setErrorMsg] = useState('');
+  const axiosPublic = useAxiosPublic();
+  const {state} = useLocation();
 
   const handleSubmit = e => {
     e.preventDefault();
@@ -28,27 +32,46 @@ const Register = () => {
       .then((userCredential) => {
         updateProfile(auth.currentUser, {displayName, photoURL})
           .then(() => {
-            setUser(userCredential.user)
-            toast.success("Registration Successful !!!");
+            axiosPublic.post('/users', {email}, {withCredentials: true})
+              .then(res => {
+                if (res.data.insertedId) {
+                  Swal.fire({
+                    title: "Congrats!",
+                    text: "You earned bronze badge!",
+                    icon: "success"
+                  });
+                  setUser(userCredential.user);
+                  setUserRole("bronze");
+                }
+              })
+              .catch(error => toast.error(error.message))
           })
-          .catch((error) => {
-            toast.error(error.message);
-          })
+          .catch((error) => toast.error(error.message))
       })
-      .catch((error) => {
-        toast.error(error.message);
-      })
+      .catch((error) => toast.error(error.message))
   }
   const googleLogin = () => {
     const googleProvider = new GoogleAuthProvider();
     signInWithPopup(auth, googleProvider)
       .then((userCredential) => {
-        setUser(userCredential.user)
-        toast.success('Login Successful !!!');
+        axiosPublic.post('/users', {email: userCredential.user?.email}, {withCredentials: true})
+          .then(res => {
+            if (res.data.insertedId) {
+              Swal.fire({
+                title: "Congrats!",
+                text: "You earned bronze badge!",
+                icon: "success"
+              });
+              setUserRole("bronze");
+            } else {
+              toast.success('Login Successful !!!');
+              setUserRole(res.data?.role);
+            }
+            setUser(userCredential.user);
+          })
+          .catch(error => toast.error(error.message))
       })
-      .catch(error => {
-        toast.error(error.code);
-      })
+      .catch(error => toast.error(error.code))
   }
   const handlePassOnChange = e => {
     setIsActive(false);
@@ -112,7 +135,7 @@ const Register = () => {
 
               <button type="submit" className="btn btn-primary btn-block mt-5" disabled={isActive ? "" : "disabled"}>Register</button>
             </form>
-            <p className="mt-4">Already have an account? <Link to='/login' className="text-primary font-medium">Login</Link></p>
+            <p className="mt-4">Already have an account? <Link to='/login' className="text-primary font-medium" state={state}>Login</Link></p>
 
             <div className="divider py-4">OR</div>
 

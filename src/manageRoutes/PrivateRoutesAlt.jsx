@@ -1,9 +1,11 @@
 import PropTypes from 'prop-types';
 import useUserContext from '../hooks/useUserContext';
-import { Navigate } from 'react-router-dom';
+import { Navigate, useLocation } from 'react-router-dom';
 
 const PrivateRoutesAlt = ({children}) => {
   const {user, userLoaded} = useUserContext();
+  const {state} = useLocation();
+  console.log(state?.prevPath);
 
   if (!userLoaded) return (
     <main className="mt-10 text-center">
@@ -12,7 +14,7 @@ const PrivateRoutesAlt = ({children}) => {
   );
 
   if (user) return (
-    <Navigate to='/' />
+    <Navigate to={state?.prevPath ? state?.prevPath : '/'} />
   );
 
   return children;
