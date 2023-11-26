@@ -15,7 +15,7 @@ const AddPost = () => {
   const [selectedTag, setSelectedTag] = useState(null);
   const axiosSecure = useAxiosSecure();
   const axiosPublic = useAxiosPublic();
-  const {data: postsCount = 0, isLoading} = useQuery({
+  const {data: postsCount = 0, isLoading, refetch} = useQuery({
     queryKey: ['postsCount'],
     queryFn: async() => {
       const res = await axiosSecure(`/postsCount?email=${user?.email}`);
@@ -64,6 +64,7 @@ const AddPost = () => {
             icon: "success"
           });
           e.target.reset();
+          refetch();
         }
       })
       .catch(error => toast.error(error.message));
@@ -89,7 +90,7 @@ const AddPost = () => {
             <FaRegFaceSadTear className="mx-auto text-[150px] text-primary mb-4" />
             <h2 className="text-3xl font-medium mb-2">Post Limit Exceed !</h2>
             <p className="text-gray-500 max-w-[500px] mx-auto mb-4">Your post limit is over. Get gold membership to add unlimited posts.</p>
-            <Link to='/membership' className="btn btn-primary">Membership</Link>
+            <Link to='/membership' className="btn btn-primary">Become a Member</Link>
           </div> : <form className="bg-gray-100 border-2 border-gray-300 rounded-lg p-4 max-w-[800px] mx-auto" onSubmit={handleSubmit}>
             <h2 className="text-3xl font-medium text-center mb-6">Add Post</h2>
             <div className="flex flex-col sm:flex-row md:flex-col lg:flex-row gap-5 mb-5">

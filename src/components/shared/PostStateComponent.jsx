@@ -39,8 +39,8 @@ const PostStateComponent = ({upVote, downVote, postId, showShare = true}) => {
 export default PostStateComponent;
 
 PostStateComponent.propTypes = {
-  upVote: PropTypes.number,
-  downVote: PropTypes.number,
+  upVote: PropTypes.string,
+  downVote: PropTypes.string,
   postId: PropTypes.string,
   showShare: PropTypes.bool
 }

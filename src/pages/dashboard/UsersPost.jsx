@@ -1,7 +1,15 @@
+import { Helmet } from "react-helmet-async";
+
 const UsersPost = () => {
   return (
     <div>
-      <p>This is UsersPost component.</p>
+      <Helmet>
+        <title>Manage Posts - CircleSync</title>
+      </Helmet>
+
+      <section>
+        
+      </section>
     </div>
   );
 };

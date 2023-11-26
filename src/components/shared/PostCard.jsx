@@ -21,7 +21,7 @@ const PostCard = ({post}) => {
         
         <div className='flex flex-wrap justify-between items-center gap-4'>
           <span className='text-gray-500'>Tag: {post.tag}</span>
-          <PostStateComponent upVote={post.upVote} downVote={post.downVote} postId={post._id} showShare={false} />
+          <PostStateComponent upVote={post.upVote + ""} downVote={post.downVote + ""} postId={post._id} showShare={false} />
         </div>
       </div>
     </Link>

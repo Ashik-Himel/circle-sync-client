@@ -78,7 +78,7 @@ export const router = createBrowserRouter([
         element: <AdminRoutes><DashboardUsers /></AdminRoutes>
       },
       {
-        path: '/dashboard/report',
+        path: '/dashboard/reports',
         element: <AdminRoutes><ReportedComments /></AdminRoutes>
       },
       {
