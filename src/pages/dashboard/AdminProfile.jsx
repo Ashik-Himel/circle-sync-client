@@ -19,7 +19,7 @@ const AdminProfile = () => {
   const {user} = useUserContext();
   const axiosSecure = useAxiosSecure();
 
-  const {data: usersCount = "0"} = useQuery({
+  const {data: usersCount = {}} = useQuery({
     queryKey: ['usersCount'],
     queryFn: async() => {
       const res = await axiosSecure(`/usersCount`);
@@ -33,7 +33,7 @@ const AdminProfile = () => {
       return res.data;
     }
   })
-  const {data: totalCommentsCount = "0"} = useQuery({
+  const {data: totalCommentsCount = {}} = useQuery({
     queryKey: ['totalCommentsCount'],
     queryFn: async() => {
       const res = await axiosSecure(`/totalCommentsCount`);
@@ -74,9 +74,9 @@ const AdminProfile = () => {
         <span className="btn btn-primary">Admin</span>
 
         <div className="flex justify-center items-center gap-6 flex-wrap mt-10">
-          <StatCard title="Total Users" value={usersCount?.totalUsers || 0} />
+          <StatCard title="Total Users" value={usersCount?.totalUsers || "0"} />
           <StatCard title="Total Posts" value={totalPostsCount} />
-          <StatCard title="Total Posts" value={totalCommentsCount} />
+          <StatCard title="Total Posts" value={totalCommentsCount?.totalComments} />
         </div>
 
         <div className="mt-10">

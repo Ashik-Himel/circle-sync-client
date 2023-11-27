@@ -73,7 +73,7 @@ const Header = () => {
                   </div>
                   <div className="flex-col justify-center items-center bg-white p-6 rounded-lg absolute top-[calc(100%+1rem)] right-0 w-full max-w-[320px] [box-shadow:0px_10px_40px_5px_rgba(0,0,0,0.3)]" style={profileShow ? {display: "flex"} : {display: "none"}}>
                     <img className="w-20 h-20 rounded-full mb-4 z-20" src={user?.photoURL} alt="User's Photo" />
-                    <span className="text-[18px] font-medium mb-1">{user?.displayName}</span>
+                    <span className="text-[18px] font-medium mb-1 text-center">{user?.displayName}</span>
                     <div className='flex justify-center items-center gap-2 mt-4'>
                       <Link to='/dashboard/stat' className='btn btn-primary' onClick={() => setProfileShow(false)}>Dashboard</Link>
                       <button className="btn btn-error text-white" onClick={() => {handleLogout(), setProfileShow(false)}}>Logout</button>

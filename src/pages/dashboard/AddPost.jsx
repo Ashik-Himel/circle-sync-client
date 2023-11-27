@@ -50,8 +50,8 @@ const AddPost = () => {
       title: form.title.value,
       description: form.description.value,
       tag: selectedTag?.value,
-      upVote: form.upVote.value,
-      downVote: form.downVote.value,
+      upVote: parseInt(form.upVote.value),
+      downVote: parseInt(form.downVote.value),
       publishedTime: new Date().toISOString()
     }
     
@@ -118,17 +118,17 @@ const AddPost = () => {
             <label className="block font-medium mb-2" htmlFor="title">Post Title</label>
             <input className="input w-full border-gray-300 mb-5" type="text" name="title" id="title" placeholder="Enter the post title" required />
 
-            <label className="block font-medium mb-2" htmlFor="title">Post Title</label>
+            <label className="block font-medium mb-2" htmlFor="title">Post Description</label>
             <textarea className="input w-full border-gray-300 py-3 mb-5 resize-none h-[100px]" name="description" id="description" placeholder="Enter the post description" required></textarea>
 
             <div className="flex flex-col sm:flex-row md:flex-col lg:flex-row gap-5 mb-5">
               <div className="flex-1">
                 <label className="block font-medium mb-2" htmlFor="upVote">Up Vote</label>
-                <input className="input w-full border-gray-300 !bg-white" type="number" name="upVote" id="upVote" defaultValue="0" disabled />
+                <input className="input w-full border-gray-300 !bg-white" type="number" name="upVote" id="upVote" defaultValue="0" />
               </div>
               <div className="flex-1">
                 <label className="block font-medium mb-2" htmlFor="downVote">Down Vote</label>
-                <input className="input w-full border-gray-300 !bg-white" type="number" name="downVote" id="downVote" defaultValue="0" disabled />
+                <input className="input w-full border-gray-300 !bg-white" type="number" name="downVote" id="downVote" defaultValue="0" />
               </div>
             </div>
 

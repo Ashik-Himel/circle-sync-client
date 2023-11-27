@@ -37,14 +37,14 @@ const DashboardHome = () => {
       return res.data;
     }
   })
-  const {data: totalCommentsCount = "0"} = useQuery({
+  const {data: totalCommentsCount = {}} = useQuery({
     queryKey: ['totalCommentsCount'],
     queryFn: async() => {
       const res = await axiosSecure(`/totalCommentsCount`);
       return res.data;
     }
   })
-  const {data: usersCount = "0"} = useQuery({
+  const {data: usersCount = {}} = useQuery({
     queryKey: ['usersCount'],
     queryFn: async() => {
       const res = await axiosSecure(`/usersCount`);
@@ -56,8 +56,8 @@ const DashboardHome = () => {
     <StatCard title="Total Users" value={usersCount?.totalUsers || "0"} />
     <StatCard title="Gold Users" value={usersCount?.goldUsers || "0"} />
     <StatCard title="Total Posts" value={totalPostsCount} />
-    <StatCard title="Total Comments" value={totalCommentsCount} />
-    <StatCard title="Reported Comments" value="14" />
+    <StatCard title="Total Comments" value={totalCommentsCount?.totalComments} />
+    <StatCard title="Reported Comments" value={totalCommentsCount?.totalReportedComments} />
   </div>
 
   const User = <div className="flex flex-wrap justify-center items-center gap-6">

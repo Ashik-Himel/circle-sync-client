@@ -19,6 +19,7 @@ import AddPost from '../pages/dashboard/AddPost';
 import DashboardUsers from '../pages/dashboard/DashboardUsers';
 import ReportedComments from '../pages/dashboard/ReportedComments';
 import MakeAnnouncement from '../pages/dashboard/MakeAnnouncement';
+import SinglePostAllComments from '../pages/dashboard/SinglePostAllComments';
 
 export const router = createBrowserRouter([
   {
@@ -64,6 +65,10 @@ export const router = createBrowserRouter([
       {
         path: '/dashboard/posts',
         element: <UserRoutes><UsersPost /></UserRoutes>
+      },
+      {
+        path: '/dashboard/posts/:id/comments',
+        element: <UserRoutes><SinglePostAllComments /></UserRoutes>
       },
       {
         path: '/dashboard/add-post',

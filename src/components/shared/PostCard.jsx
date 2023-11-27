@@ -8,7 +8,7 @@ const PostCard = ({post}) => {
     <Link to={`/posts/${post._id}`} className='bg-gray-100 border-2 border-gray-300 rounded-lg'>
       <div className='p-4 border-b-2 border-gray-300 flex items-center gap-4'>
         <div>
-          <img className='w-12 h-12 rounded-full' src={post.author.photo} alt="Author's Photo" />
+          <img className='w-full max-w-[3rem] rounded-full' src={post.author.photo} alt="Author's Photo" />
         </div>
         <div>
           <h4 className='text-[18px] font-semibold'>Author: {post.author.name}</h4>

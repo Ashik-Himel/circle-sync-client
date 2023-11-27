@@ -54,7 +54,7 @@ const UserProfile = () => {
                   <td>{format(new Date(post?.publishedTime), "dd MMM, yyyy")}</td>
                   <td>{post?.upVote}</td>
                   <td>{post?.downVote}</td>
-                  <td><Link to='' className="btn btn-primary min-h-[32px]">View</Link></td>
+                  <td><Link to={`/dashboard/posts/${post._id}/comments`} className="btn btn-primary min-h-[32px]">View</Link></td>
                 </tr>)
               }
             </tbody>
