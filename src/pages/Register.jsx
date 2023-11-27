@@ -32,7 +32,7 @@ const Register = () => {
       .then((userCredential) => {
         updateProfile(auth.currentUser, {displayName, photoURL})
           .then(() => {
-            axiosPublic.post('/users', {email}, {withCredentials: true})
+            axiosPublic.post('/users', {email, name: userCredential.user?.displayName}, {withCredentials: true})
               .then(res => {
                 if (res.data.insertedId) {
                   Swal.fire({
@@ -54,7 +54,7 @@ const Register = () => {
     const googleProvider = new GoogleAuthProvider();
     signInWithPopup(auth, googleProvider)
       .then((userCredential) => {
-        axiosPublic.post('/users', {email: userCredential.user?.email}, {withCredentials: true})
+        axiosPublic.post('/users', {email: userCredential.user?.email, name: userCredential.user?.displayName}, {withCredentials: true})
           .then(res => {
             if (res.data.insertedId) {
               Swal.fire({

@@ -5,7 +5,6 @@ import { Navigate, useLocation } from 'react-router-dom';
 const PrivateRoutesAlt = ({children}) => {
   const {user, userLoaded} = useUserContext();
   const {state} = useLocation();
-  console.log(state?.prevPath);
 
   if (!userLoaded) return (
     <main className="mt-10 text-center">
