@@ -2,16 +2,37 @@ import { Helmet } from "react-helmet-async";
 import useAxiosSecure from "../../hooks/useAxiosSecure";
 import { useQuery } from "@tanstack/react-query";
 import Swal from "sweetalert2";
+import { useEffect, useState } from "react";
 
 const ReportedComments = () => {
+  const [page, setPage] = useState(1);
   const axiosSecure = useAxiosSecure();
   const {data: reportedComments = [], refetch} = useQuery({
     queryKey: ['reportedComments'],
     queryFn: async() => {
-      const res = await axiosSecure('/reportedComments');
+      const res = await axiosSecure(`/reportedComments?skip=${page-1}`);
       return res.data;
     }
   })
+
+  const {data: totalReportedComments, isLoading: isLoading2} = useQuery({
+    queryKey: ['totalReportedComments'],
+    queryFn: async() => {
+      const res = await axiosSecure(`/totalCommentsCount`);
+      return res.data;
+    }
+  })
+
+  let pageTrack = [];
+  if (!isLoading2) {
+    for (let i = 1; i <= Math.ceil(totalReportedComments?.totalReportedComments / 10); i++) {
+      pageTrack.push(i);
+    }
+  }
+
+  useEffect(() => {
+    refetch();
+  }, [page, refetch]);
 
   const handleDelete = id => {
     Swal.fire({
@@ -109,6 +130,29 @@ const ReportedComments = () => {
               }
             </tbody>
           </table>
+        </div>
+
+        <div className="max-w-[900px] mx-auto">
+          <div>
+            <nav className="flex justify-between items-center gap-4 py-3 flex-wrap">
+              <div>
+                <span>Showing {Math.min(((page-1) * 10)+1, totalReportedComments?.totalReportedComments)}-{Math.min(page*10, totalReportedComments?.totalReportedComments)} of {totalReportedComments?.totalReportedComments}</span>
+              </div>
+              <ul className="flex flex-wrap justify-center items-center -space-x-px text-sm">
+                <li>
+                  <button className="flex items-center justify-center px-3 h-8 ml-0 leading-tight bg-white border border-gray-500 rounded-l-lg hover:bg-primary hover:text-white disabled:!bg-gray-300 disabled:!text-black disabled:cursor-not-allowed" disabled={page === 1 ? "disabled" : ""} onClick={() => setPage(page-1)}>Prev</button>
+                </li>
+                {
+                  pageTrack?.map(pageNum => <li key={pageNum}>
+                    <button className="flex items-center justify-center px-3 h-8 leading-tight bg-white border border-gray-500 hover:bg-primary hover:text-white" style={pageNum === page ? {backgroundColor: "#38A1E3", color: "white"} : {}} onClick={() => setPage(pageNum)}>{pageNum}</button>
+                  </li>)
+                }
+                <li>
+                  <button className="flex items-center justify-center px-3 h-8 leading-tight bg-white border border-gray-500 rounded-r-lg hover:bg-primary hover:text-white disabled:!bg-gray-300 disabled:!text-black disabled:cursor-not-allowed" disabled={page === pageTrack?.length ? "disabled" : ""} onClick={() => setPage(page+1)}>Next</button>
+                </li>
+              </ul>
+            </nav>
+          </div>
         </div>
       </section>
     </div>

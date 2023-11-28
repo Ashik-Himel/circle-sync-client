@@ -6,14 +6,17 @@ import { useQuery } from "@tanstack/react-query";
 import useAxiosSecure from "../../hooks/useAxiosSecure";
 import { format } from "date-fns";
 import { Link } from "react-router-dom";
+import { useState } from "react";
 
 const UserProfile = () => {
+  const [page, setPage] = useState(1);
+  let pageTrack = [1];
   const {user, userRole} = useUserContext();
   const axiosSecure = useAxiosSecure();
   const {data : posts = []} = useQuery({
     queryKey: ['posts', user?.email],
     queryFn: async() => {
-      const res = await axiosSecure(`/posts/user/${user?.email}`);
+      const res = await axiosSecure(`/posts/user/${user?.email}?skip=${page-1}`);
       return res.data;
     }
   })
@@ -59,6 +62,29 @@ const UserProfile = () => {
               }
             </tbody>
           </table>
+        </div>
+
+        <div className="max-w-[900px] mx-auto">
+          <div>
+            <nav className="flex justify-between items-center gap-4 py-3 flex-wrap">
+              <div>
+                <span>Showing 1-3 of 3</span>
+              </div>
+              <ul className="flex flex-wrap justify-center items-center -space-x-px text-sm">
+                <li>
+                  <button className="flex items-center justify-center px-3 h-8 ml-0 leading-tight bg-white border border-gray-500 rounded-l-lg hover:bg-primary hover:text-white disabled:!bg-gray-300 disabled:!text-black disabled:cursor-not-allowed" disabled={page === 1 ? "disabled" : ""} onClick={() => setPage(page-1)}>Prev</button>
+                </li>
+                {
+                  pageTrack?.map(pageNum => <li key={pageNum}>
+                    <button className="flex items-center justify-center px-3 h-8 leading-tight bg-white border border-gray-500 hover:bg-primary hover:text-white" style={pageNum === page ? {backgroundColor: "#38A1E3", color: "white"} : {}} onClick={() => setPage(pageNum)}>{pageNum}</button>
+                  </li>)
+                }
+                <li>
+                  <button className="flex items-center justify-center px-3 h-8 leading-tight bg-white border border-gray-500 rounded-r-lg hover:bg-primary hover:text-white disabled:!bg-gray-300 disabled:!text-black disabled:cursor-not-allowed" disabled={page === pageTrack?.length ? "disabled" : ""} onClick={() => setPage(page+1)}>Next</button>
+                </li>
+              </ul>
+            </nav>
+          </div>
         </div>
       </section>
     </div>

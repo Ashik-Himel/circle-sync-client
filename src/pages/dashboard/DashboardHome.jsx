@@ -3,6 +3,7 @@ import useUserContext from "../../hooks/useUserContext";
 import PropTypes from 'prop-types';
 import { useQuery } from "@tanstack/react-query";
 import useAxiosSecure from "../../hooks/useAxiosSecure";
+import useAxiosPublic from "../../hooks/useAxiosPublic";
 
 const StatCard = ({title, value}) => {
   return (
@@ -16,14 +17,12 @@ const StatCard = ({title, value}) => {
 const DashboardHome = () => {
   const {user, userRole} = useUserContext();
   const axiosSecure = useAxiosSecure();
+  const axiosPublic = useAxiosPublic();
   const {data: totalPostsCount = "0"} = useQuery({
     queryKey: ['totalPostsCount'],
     queryFn: async() => {
-      if (userRole === 'admin') {
-        const res = await axiosSecure(`/totalPostsCount`);
-        return res.data;
-      }
-      return null;
+      const res = await axiosPublic(`/totalPostsCount`);
+      return res.data;
     }
   })
   const {data: postsCount = "0"} = useQuery({

@@ -5,6 +5,8 @@ import { useQuery } from "@tanstack/react-query";
 import PropTypes from 'prop-types';
 import toast from "react-hot-toast";
 import Swal from "sweetalert2";
+import useAxiosPublic from "../../hooks/useAxiosPublic";
+import { Chart } from "react-google-charts";
 
 const StatCard = ({title, value}) => {
   return (
@@ -18,6 +20,7 @@ const StatCard = ({title, value}) => {
 const AdminProfile = () => {
   const {user} = useUserContext();
   const axiosSecure = useAxiosSecure();
+  const axiosPublic = useAxiosPublic();
 
   const {data: usersCount = {}} = useQuery({
     queryKey: ['usersCount'],
@@ -29,7 +32,7 @@ const AdminProfile = () => {
   const {data: totalPostsCount = "0"} = useQuery({
     queryKey: ['totalPostsCount'],
     queryFn: async() => {
-      const res = await axiosSecure(`/totalPostsCount`);
+      const res = await axiosPublic(`/totalPostsCount`);
       return res.data;
     }
   })
@@ -40,6 +43,18 @@ const AdminProfile = () => {
       return res.data;
     }
   })
+
+  let data = [
+    ["Title", "Value"],
+    ["Users", parseInt(usersCount?.totalUsers)],
+    ["Posts", parseInt(totalPostsCount)],
+    ["Comments", parseInt(totalCommentsCount?.totalComments)],
+  ];
+  const options = {
+    legend: "none",
+    colors: ["#00C49F", "#FF444A", "#0984e3"],
+    backgroundColor: 'none'
+  };
 
   const handleSubmit = e => {
     e.preventDefault();
@@ -73,10 +88,20 @@ const AdminProfile = () => {
         <span className="text-gray-500 block mb-3">{user?.email}</span>
         <span className="btn btn-primary">Admin</span>
 
+        <div className="-mt-[30px] -mb-[50px]">
+          <Chart
+            chartType="PieChart"
+            data={data}
+            options={options}
+            width={"100%"}
+            height={400}
+          />
+        </div>
+
         <div className="flex justify-center items-center gap-6 flex-wrap mt-10">
           <StatCard title="Total Users" value={"" + usersCount?.totalUsers || "0"} />
           <StatCard title="Total Posts" value={"" + totalPostsCount} />
-          <StatCard title="Total Posts" value={"" + totalCommentsCount?.totalComments} />
+          <StatCard title="Total Comments" value={"" + totalCommentsCount?.totalComments} />
         </div>
 
         <div className="mt-10">
