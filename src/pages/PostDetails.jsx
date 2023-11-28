@@ -58,7 +58,7 @@ const PostDetails = () => {
                   <span></span>
                 </div>
               </div>
-              <PostStateComponent upVote={post.upVote} downVote={post.downVote} postId={post._id} />
+              <PostStateComponent upVote={"" + post.upVote} downVote={"" + post.downVote} postId={post._id} />
             </div>
 
             <div className="p-4">

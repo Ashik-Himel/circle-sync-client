@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import {onAuthStateChanged} from 'firebase/auth';
 import { auth } from "../firebase.config";
 import useAxiosPublic from "../hooks/useAxiosPublic";
-import toast from "react-hot-toast";
 
 export const UserProvider = createContext(null);
 
@@ -17,11 +16,10 @@ const ContextProvider = ({children}) => {
     const unSubscribe = onAuthStateChanged(auth, user => {
       setUser(user);
       if (user?.email) {
-        axiosPublic.post('/users', {email: user?.email, setToken: false}, {withCredentials: true})
+        axiosPublic.post('/userRole', {email: user?.email}, {withCredentials: true})
           .then(res => {
             setUserRole(res.data?.role);
           })
-          .catch(error => toast.error(error.message))
       }
       setUserLoaded(true);
     });

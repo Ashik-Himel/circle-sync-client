@@ -74,9 +74,9 @@ const AdminProfile = () => {
         <span className="btn btn-primary">Admin</span>
 
         <div className="flex justify-center items-center gap-6 flex-wrap mt-10">
-          <StatCard title="Total Users" value={usersCount?.totalUsers || "0"} />
-          <StatCard title="Total Posts" value={totalPostsCount} />
-          <StatCard title="Total Posts" value={totalCommentsCount?.totalComments} />
+          <StatCard title="Total Users" value={"" + usersCount?.totalUsers || "0"} />
+          <StatCard title="Total Posts" value={"" + totalPostsCount} />
+          <StatCard title="Total Posts" value={"" + totalCommentsCount?.totalComments} />
         </div>
 
         <div className="mt-10">

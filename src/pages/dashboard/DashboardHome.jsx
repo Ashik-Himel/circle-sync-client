@@ -19,8 +19,11 @@ const DashboardHome = () => {
   const {data: totalPostsCount = "0"} = useQuery({
     queryKey: ['totalPostsCount'],
     queryFn: async() => {
-      const res = await axiosSecure(`/totalPostsCount`);
-      return res.data;
+      if (userRole === 'admin') {
+        const res = await axiosSecure(`/totalPostsCount`);
+        return res.data;
+      }
+      return null;
     }
   })
   const {data: postsCount = "0"} = useQuery({
@@ -40,30 +43,36 @@ const DashboardHome = () => {
   const {data: totalCommentsCount = {}} = useQuery({
     queryKey: ['totalCommentsCount'],
     queryFn: async() => {
-      const res = await axiosSecure(`/totalCommentsCount`);
-      return res.data;
+      if (userRole === 'admin') {
+        const res = await axiosSecure(`/totalCommentsCount`);
+        return res.data;
+      }
+      return null;
     }
   })
   const {data: usersCount = {}} = useQuery({
     queryKey: ['usersCount'],
     queryFn: async() => {
-      const res = await axiosSecure(`/usersCount`);
-      return res.data;
+      if (userRole === 'admin') {
+        const res = await axiosSecure(`/usersCount`);
+        return res.data;
+      }
+      return null;
     }
   })
 
   const Admin = <div className="flex flex-wrap justify-center items-center gap-6">
     <StatCard title="Total Users" value={usersCount?.totalUsers || "0"} />
     <StatCard title="Gold Users" value={usersCount?.goldUsers || "0"} />
-    <StatCard title="Total Posts" value={totalPostsCount} />
+    <StatCard title="Total Posts" value={"" + totalPostsCount} />
     <StatCard title="Total Comments" value={totalCommentsCount?.totalComments} />
     <StatCard title="Reported Comments" value={totalCommentsCount?.totalReportedComments} />
   </div>
 
   const User = <div className="flex flex-wrap justify-center items-center gap-6">
-    <StatCard title="Total Posts" value={postsCount} />
+    <StatCard title="Total Posts" value={"" + postsCount} />
     <StatCard title="User Status" value={userRole && userRole[0]?.toUpperCase() + userRole?.slice(1)} />
-    <StatCard title="Total Comments" value={commentsCount} />
+    <StatCard title="Total Comments" value={"" + commentsCount} />
   </div>
 
   return (
