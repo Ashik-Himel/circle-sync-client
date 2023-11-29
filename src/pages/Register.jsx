@@ -1,6 +1,6 @@
 import { Helmet } from "react-helmet-async";
 import useUserContext from "../hooks/useUserContext";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { GoogleAuthProvider, createUserWithEmailAndPassword, signInWithPopup, updateProfile } from "firebase/auth";
 import { auth } from "../firebase.config";
 import toast from "react-hot-toast";
@@ -9,6 +9,7 @@ import { Link, useLocation } from "react-router-dom";
 import googleIcon from '../assets/images/google.png';
 import useAxiosPublic from "../hooks/useAxiosPublic";
 import Swal from "sweetalert2";
+import { useForm } from "react-hook-form";
 
 const Register = () => {
   const {setUser, setUserRole} = useUserContext();
@@ -18,15 +19,13 @@ const Register = () => {
   const [errorMsg, setErrorMsg] = useState('');
   const axiosPublic = useAxiosPublic();
   const {state} = useLocation();
+  const {register, handleSubmit, watch} = useForm();
 
-  const handleSubmit = e => {
-    e.preventDefault();
-
-    // Get values
-    const displayName = e.target.name.value;
-    const photoURL = e.target.photo.value;
-    const email = e.target.email.value;
-    const password = e.target.password.value;
+  const onSubmit = data => {
+    const displayName = data.name;
+    const photoURL = data.photo;
+    const email = data.email;
+    const password = data.password;
     
     createUserWithEmailAndPassword(auth, email, password)
       .then((userCredential) => {
@@ -73,30 +72,33 @@ const Register = () => {
       })
       .catch(error => toast.error(error.code))
   }
-  const handlePassOnChange = e => {
-    setIsActive(false);
-    setErrorMsg("");
-    const password = e.target.value;
-    if (password) setShowEye(true)
-    else setShowEye(false)
+  
+  const password = watch("password");
+  useEffect(()=> {
+    if (password) {
+      setIsActive(false);
+      setErrorMsg("");
+      if (password) setShowEye(true)
+      else setShowEye(false)
 
-    if (password.length < 6) {
-      setErrorMsg("Password must be at least 6 characters!");
-      return;
+      if (password.length < 6) {
+        setErrorMsg("Password must be at least 6 characters!");
+        return;
+      }
+      else if (!/[A-Z]/.test(password)) {
+        setErrorMsg("At least one uppercase character required!");
+        return;
+      }
+      else if (!/[0-9]/.test(password)) {
+        setErrorMsg("At least one number required!");
+        return;
+      }
+      else if (!/[^A-Za-z0-9]/.test(password)) {
+        return setErrorMsg("At least one special character required!");
+      }
+      setIsActive(true);
     }
-    else if (!/[A-Z]/.test(password)) {
-      setErrorMsg("At least one uppercase character required!");
-      return;
-    }
-    else if (!/[0-9]/.test(password)) {
-      setErrorMsg("At least one number required!");
-      return;
-    }
-    else if (!/[^A-Za-z0-9]/.test(password)) {
-      return setErrorMsg("At least one special character required!");
-    }
-    setIsActive(true);
-  }
+  }, [password])
 
   return (
     <main>
@@ -109,19 +111,19 @@ const Register = () => {
           <div className="bg-gray-100 border-2 border-gray-300 rounded-lg p-6 max-w-[500px] mx-auto">
             <h2 className="text-center text-3xl font-medium mb-6">Register</h2>
 
-            <form onSubmit={handleSubmit}>
+            <form onSubmit={handleSubmit(onSubmit)}>
               <label htmlFor="name" className="block font-medium mb-2">Your Name</label>
-              <input className="input w-full border-2 border-gray-300 mb-4" type="text" name="name" id="name" placeholder="Enter your name" required />
+              <input className="input w-full border-2 border-gray-300 mb-4" type="text" {...register("name")} id="name" placeholder="Enter your name" required />
 
               <label htmlFor="photo" className="block font-medium mb-2">Photo URL</label>
-              <input className="input w-full border-2 border-gray-300 mb-4" type="url" name="photo" id="photo" placeholder="Enter your photo url" required />
+              <input className="input w-full border-2 border-gray-300 mb-4" type="url" {...register("photo")} id="photo" placeholder="Enter your photo url" required />
 
               <label htmlFor="email" className="block font-medium mb-2">Email</label>
-              <input className="input w-full border-2 border-gray-300 mb-4" type="email" name="email" id="email" placeholder="Enter your email address" required />
+              <input className="input w-full border-2 border-gray-300 mb-4" type="email" {...register("email")} id="email" placeholder="Enter your email address" required />
 
               <label htmlFor="password" className="block font-medium mb-2">Password</label>
               <div className="relative">
-                <input className="input w-full border-2 border-gray-300" onChange={handlePassOnChange} type={showPass ? "text": "password"} name="password" id="password" placeholder="Enter your password" required />
+                <input className="input w-full border-2 border-gray-300" type={showPass ? "text": "password"} {...register("password")} name="password" id="password" placeholder="Enter your password" required />
                 {
                   showEye ? showPass ? <FaEyeSlash className="absolute top-1/2 right-4 -translate-y-1/2 text-2xl cursor-pointer" onClick={() => setShowPass(!showPass)} /> : <FaEye className="absolute top-1/2 right-4 -translate-y-1/2 text-2xl cursor-pointer" onClick={() => setShowPass(!showPass)} /> : ''
                 }

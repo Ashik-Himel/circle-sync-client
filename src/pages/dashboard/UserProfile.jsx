@@ -68,7 +68,7 @@ const UserProfile = () => {
           <div>
             <nav className="flex justify-between items-center gap-4 py-3 flex-wrap">
               <div>
-                <span>Showing 1-3 of 3</span>
+                <span>Showing {Math.min(posts.length, 1)}-{Math.min(posts.length, 3)} of {Math.min(posts.length, 3)}</span>
               </div>
               <ul className="flex flex-wrap justify-center items-center -space-x-px text-sm">
                 <li>

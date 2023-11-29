@@ -9,12 +9,15 @@ import useAxiosPublic from "../../hooks/useAxiosPublic";
 import { useState } from "react";
 import Swal from "sweetalert2";
 import toast from "react-hot-toast";
+import { useForm } from "react-hook-form";
 
 const AddPost = () => {
   const {user, userRole} = useUserContext();
   const [selectedTag, setSelectedTag] = useState(null);
   const axiosSecure = useAxiosSecure();
   const axiosPublic = useAxiosPublic();
+  const {register, handleSubmit, reset} = useForm();
+
   const {data: postsCount = 0, isLoading, refetch} = useQuery({
     queryKey: ['postsCount'],
     queryFn: async() => {
@@ -37,21 +40,18 @@ const AddPost = () => {
     }
   });
 
-  const handleSubmit = e => {
-    e.preventDefault();
-
-    const form = e.target;
+  const onSubmit = data => {
     const post = {
       author: {
-        name: form.authorName.value,
-        email: form.authorEmail.value,
-        photo: form.authorImage.value,
+        name: data.authorName,
+        email: data.authorEmail,
+        photo: data.authorImage,
       },
-      title: form.title.value,
-      description: form.description.value,
+      title: data.title,
+      description: data.description,
       tag: selectedTag?.value,
-      upVote: parseInt(form.upVote.value),
-      downVote: parseInt(form.downVote.value),
+      upVote: parseInt(data.upVote),
+      downVote: parseInt(data.downVote),
       publishedTime: new Date().toISOString()
     }
     
@@ -63,7 +63,7 @@ const AddPost = () => {
             text: "Post Added Successfully!",
             icon: "success"
           });
-          e.target.reset();
+          reset();
           refetch();
         }
       })
@@ -91,23 +91,23 @@ const AddPost = () => {
             <h2 className="text-3xl font-medium mb-2">Post Limit Exceed !</h2>
             <p className="text-gray-500 max-w-[500px] mx-auto mb-4">Your post limit is over. Get gold membership to add unlimited posts.</p>
             <Link to='/membership' className="btn btn-primary">Become a Member</Link>
-          </div> : <form className="bg-gray-100 border-2 border-gray-300 rounded-lg p-4 max-w-[800px] mx-auto" onSubmit={handleSubmit}>
+          </div> : <form className="bg-gray-100 border-2 border-gray-300 rounded-lg p-4 max-w-[800px] mx-auto" onSubmit={handleSubmit(onSubmit)}>
             <h2 className="text-3xl font-medium text-center mb-6">Add Post</h2>
             <div className="flex flex-col sm:flex-row md:flex-col lg:flex-row gap-5 mb-5">
               <div className="flex-1">
                 <label className="block font-medium mb-2" htmlFor="authorName">Author&apos;s Name</label>
-                <input className="input w-full border-gray-300 !bg-white" type="text" name="authorName" id="authorName" defaultValue={user?.displayName} disabled />
+                <input className="input opacity-60 cursor-not-allowed w-full border-gray-300 !bg-white" type="text" {...register("authorName")} id="authorName" defaultValue={user?.displayName} readOnly />
               </div>
               <div className="flex-1">
                 <label className="block font-medium mb-2" htmlFor="authorEmail">Author&apos;s Email</label>
-                <input className="input w-full border-gray-300 !bg-white" type="email" name="authorEmail" id="authorEmail" defaultValue={user?.email} disabled />
+                <input className="input opacity-60 cursor-not-allowed w-full border-gray-300 !bg-white" type="email" {...register("authorEmail")} id="authorEmail" defaultValue={user?.email} readOnly />
               </div>
             </div>
 
             <div className="flex flex-col sm:flex-row md:flex-col lg:flex-row gap-5 mb-5">
               <div className="flex-1">
                 <label className="block font-medium mb-2" htmlFor="authorImage">Author&apos;s Image</label>
-                <input className="input w-full border-gray-300 !bg-white" type="url" name="authorImage" id="authorImage" defaultValue={user?.photoURL} disabled />
+                <input className="input opacity-60 cursor-not-allowed w-full border-gray-300 !bg-white" type="url" {...register("authorImage")} id="authorImage" defaultValue={user?.photoURL} readOnly />
               </div>
               <div className="flex-1">
                 <label className="block font-medium mb-2" htmlFor="tag">Post Tag</label>
@@ -116,19 +116,19 @@ const AddPost = () => {
             </div>
 
             <label className="block font-medium mb-2" htmlFor="title">Post Title</label>
-            <input className="input w-full border-gray-300 mb-5" type="text" name="title" id="title" placeholder="Enter the post title" required />
+            <input className="input w-full border-gray-300 mb-5" type="text" {...register("title")} id="title" placeholder="Enter the post title" required />
 
             <label className="block font-medium mb-2" htmlFor="title">Post Description</label>
-            <textarea className="input w-full border-gray-300 py-3 mb-5 resize-none h-[100px]" name="description" id="description" placeholder="Enter the post description" required></textarea>
+            <textarea className="input w-full border-gray-300 py-3 mb-5 resize-none h-[100px]" {...register("description")} id="description" placeholder="Enter the post description" required></textarea>
 
             <div className="flex flex-col sm:flex-row md:flex-col lg:flex-row gap-5 mb-5">
               <div className="flex-1">
                 <label className="block font-medium mb-2" htmlFor="upVote">Up Vote</label>
-                <input className="input w-full border-gray-300 !bg-white" type="number" name="upVote" id="upVote" defaultValue="0" />
+                <input className="input w-full border-gray-300 !bg-white" type="number" {...register("upVote")} id="upVote" defaultValue="0" />
               </div>
               <div className="flex-1">
                 <label className="block font-medium mb-2" htmlFor="downVote">Down Vote</label>
-                <input className="input w-full border-gray-300 !bg-white" type="number" name="downVote" id="downVote" defaultValue="0" />
+                <input className="input w-full border-gray-300 !bg-white" type="number" {...register("downVote")} id="downVote" defaultValue="0" />
               </div>
             </div>
 

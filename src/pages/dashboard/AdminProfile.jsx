@@ -7,6 +7,7 @@ import toast from "react-hot-toast";
 import Swal from "sweetalert2";
 import useAxiosPublic from "../../hooks/useAxiosPublic";
 import { Chart } from "react-google-charts";
+import { useForm } from "react-hook-form";
 
 const StatCard = ({title, value}) => {
   return (
@@ -21,6 +22,7 @@ const AdminProfile = () => {
   const {user} = useUserContext();
   const axiosSecure = useAxiosSecure();
   const axiosPublic = useAxiosPublic();
+  const {register, handleSubmit, reset} = useForm();
 
   const {data: usersCount = {}} = useQuery({
     queryKey: ['usersCount'],
@@ -56,10 +58,8 @@ const AdminProfile = () => {
     backgroundColor: 'none'
   };
 
-  const handleSubmit = e => {
-    e.preventDefault();
-
-    let tag = (e.target.tag.value).trim();
+  const onSubmit = data => {
+    let tag = (data.tag).trim();
     tag = tag[0].toUpperCase() + tag.slice(1);
 
     axiosSecure.post('/tags', {tag})
@@ -70,7 +70,7 @@ const AdminProfile = () => {
             "Tag added successfully",
             "success"
           )
-          e.target.reset();
+          reset();
         }
       })
       .catch(error => toast.error(error.message));
@@ -106,8 +106,8 @@ const AdminProfile = () => {
 
         <div className="mt-10">
           <h3 className="text-3xl font-medium text-primary mb-4">Add Tags:</h3>
-          <form className="flex justify-center gap-4 max-w-[500px] mx-auto" onSubmit={handleSubmit}>
-          <input className="flex-1 w-full input border-2 border-gray-300" type="text" name="tag" id="tag" placeholder="Add tag with single word" required />
+          <form className="flex justify-center gap-4 max-w-[500px] mx-auto" onSubmit={handleSubmit(onSubmit)}>
+          <input className="flex-1 w-full input border-2 border-gray-300" type="text" {...register("tag")} id="tag" placeholder="Add tag with single word" required />
             <button type="submit" className="btn btn-primary px-8">Add</button>
           </form>
         </div>

@@ -4,30 +4,30 @@ import LoadingComponent from "./LoadingComponent";
 import PropTypes from 'prop-types';
 import useAxiosSecure from "../../hooks/useAxiosSecure";
 import Swal from "sweetalert2";
+import { useForm } from "react-hook-form";
 
 const AddCommentCard = ({postTitle, postId, postAuthorEmail, refetch, commentState, setCommentState}) => {
   const {user, userLoaded} = useUserContext();
   const {pathname} = useLocation();
   const axiosSecure = useAxiosSecure();
+  const {register, handleSubmit, reset} = useForm();
 
-  const handleSubmit = e => {
-    e.preventDefault();
-
+  const onSubmit = data => {
     const time = new Date().toISOString();
-    const comment = e.target.comment.value;
+    const comment = data.comment;
     const author = {
       name: user?.displayName,
       email: user?.email,
       photo: user?.photoURL,
     };
-    const data = {postTitle, postId, postAuthorEmail, comment, time, author}
+    const commentObj = {postTitle, postId, postAuthorEmail, comment, time, author}
 
-    axiosSecure.post('/comments', data)
+    axiosSecure.post('/comments', commentObj)
       .then((res) => {
         if (res.data?.insertedId) {
           refetch();
           setCommentState(!commentState);
-          e.target.reset();
+          reset();
         }
       })
       .catch(err => {
@@ -48,8 +48,8 @@ const AddCommentCard = ({postTitle, postId, postAuthorEmail, refetch, commentSta
   );
 
   return (
-    <form className="mt-8" onSubmit={handleSubmit}>
-      <textarea className="textarea w-full resize-none border-2 border-gray-300" name="comment" id="comment" placeholder="Write a comment" required></textarea>
+    <form className="mt-8" onSubmit={handleSubmit(onSubmit)}>
+      <textarea className="textarea w-full resize-none border-2 border-gray-300" {...register("comment")} id="comment" placeholder="Write a comment" required></textarea>
       <button className="btn btn-primary mt-2" type="submit">Comment</button>
     </form>
   );
