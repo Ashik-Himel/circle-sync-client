@@ -10,6 +10,8 @@ import { useState } from "react";
 import Swal from "sweetalert2";
 import toast from "react-hot-toast";
 import { useForm } from "react-hook-form";
+import { AwesomeButton } from "react-awesome-button";
+import "react-awesome-button/dist/styles.css";
 
 const AddPost = () => {
   const {user, userRole} = useUserContext();
@@ -132,7 +134,11 @@ const AddPost = () => {
               </div>
             </div>
 
-            <button className="btn btn-primary btn-block">Add Post</button>
+            <div className="text-center">
+              <button type="submit">
+                <AwesomeButton type="primary">Add Post</AwesomeButton>
+              </button>
+            </div>
           </form>
         }
       </section>

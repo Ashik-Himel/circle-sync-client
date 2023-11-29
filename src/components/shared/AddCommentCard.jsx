@@ -5,6 +5,8 @@ import PropTypes from 'prop-types';
 import useAxiosSecure from "../../hooks/useAxiosSecure";
 import Swal from "sweetalert2";
 import { useForm } from "react-hook-form";
+import { AwesomeButton } from "react-awesome-button";
+import "react-awesome-button/dist/styles.css";
 
 const AddCommentCard = ({postTitle, postId, postAuthorEmail, refetch, commentState, setCommentState}) => {
   const {user, userLoaded} = useUserContext();
@@ -50,7 +52,9 @@ const AddCommentCard = ({postTitle, postId, postAuthorEmail, refetch, commentSta
   return (
     <form className="mt-8" onSubmit={handleSubmit(onSubmit)}>
       <textarea className="textarea w-full resize-none border-2 border-gray-300" {...register("comment")} id="comment" placeholder="Write a comment" required></textarea>
-      <button className="btn btn-primary mt-2" type="submit">Comment</button>
+      <button className="mt-2" type="submit">
+        <AwesomeButton type="primary">Comment</AwesomeButton>
+      </button>
     </form>
   );
 };

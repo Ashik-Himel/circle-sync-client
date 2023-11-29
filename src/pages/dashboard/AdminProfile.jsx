@@ -8,6 +8,8 @@ import Swal from "sweetalert2";
 import useAxiosPublic from "../../hooks/useAxiosPublic";
 import { Chart } from "react-google-charts";
 import { useForm } from "react-hook-form";
+import { AwesomeButton } from "react-awesome-button";
+import "react-awesome-button/dist/styles.css";
 
 const StatCard = ({title, value}) => {
   return (
@@ -86,7 +88,7 @@ const AdminProfile = () => {
         <img className="w-32 rounded-full mx-auto mb-2" src={user?.photoURL} alt="User's Photo" />
         <h3 className="text-2xl font-medium">{user?.displayName}</h3>
         <span className="text-gray-500 block mb-3">{user?.email}</span>
-        <span className="btn btn-primary">Admin</span>
+        <AwesomeButton type="primary">Admin</AwesomeButton>
 
         <div className="-mt-[30px] -mb-[50px]">
           <Chart
@@ -98,17 +100,19 @@ const AdminProfile = () => {
           />
         </div>
 
-        <div className="flex justify-center items-center gap-6 flex-wrap mt-10">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mt-10">
           <StatCard title="Total Users" value={"" + usersCount?.totalUsers || "0"} />
           <StatCard title="Total Posts" value={"" + totalPostsCount} />
           <StatCard title="Total Comments" value={"" + totalCommentsCount?.totalComments} />
         </div>
 
-        <div className="mt-10">
+        <div className="my-10">
           <h3 className="text-3xl font-medium text-primary mb-4">Add Tags:</h3>
           <form className="flex justify-center gap-4 max-w-[500px] mx-auto" onSubmit={handleSubmit(onSubmit)}>
           <input className="flex-1 w-full input border-2 border-gray-300" type="text" {...register("tag")} id="tag" placeholder="Add tag with single word" required />
-            <button type="submit" className="btn btn-primary px-8">Add</button>
+            <button type="submit">
+              <AwesomeButton type="primary">Add</AwesomeButton>
+            </button>
           </form>
         </div>
       </section>

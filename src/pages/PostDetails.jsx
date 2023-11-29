@@ -10,6 +10,8 @@ import CommentCard from "../components/shared/CommentCard";
 import AddCommentCard from "../components/shared/AddCommentCard";
 import { useState } from "react";
 import { FacebookIcon, FacebookShareButton, LinkedinIcon, LinkedinShareButton, TelegramIcon, TelegramShareButton, TwitterIcon, TwitterShareButton, WhatsappIcon, WhatsappShareButton } from "react-share";
+import { AwesomeButton } from "react-awesome-button";
+import "react-awesome-button/dist/styles.css";
 
 const PostDetails = () => {
   const [showShareBox, setShowShareBox] = useState(false);
@@ -46,10 +48,12 @@ const PostDetails = () => {
 
       <section className="mt-4">
         <div className="container">
-          <div className="max-w-[700px] mx-auto">
-            <Link to='/' className="btn btn-primary mb-4">
-              <FaArrowLeft />
-              <span>Back to Home</span>
+          <div className="max-w-[700px] mx-auto mb-4">
+            <Link to='/'>
+              <AwesomeButton type="primary">
+                <FaArrowLeft />
+                <span className="ml-2">Back to Home</span>
+              </AwesomeButton>
             </Link>
           </div>
 

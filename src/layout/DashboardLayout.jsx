@@ -2,6 +2,7 @@ import { Outlet } from "react-router-dom";
 import Header from "../components/Header";
 import DashboardSidebar from "../components/dashboard/DashboardSidebar";
 import { useState } from "react";
+import { Toaster } from "react-hot-toast";
 
 const DashboardLayout = () => {
   const [sidebarShow, setSidebarShow] = useState(false);
@@ -15,6 +16,10 @@ const DashboardLayout = () => {
           <Outlet />
         </div>
       </div>
+      <Toaster
+        position="top-center"
+        reverseOrder={false}
+      />
     </main>
   );
 };

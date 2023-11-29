@@ -60,7 +60,7 @@ const DashboardHome = () => {
     }
   })
 
-  const Admin = <div className="flex flex-wrap justify-center items-center gap-6">
+  const Admin = <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 justify-center items-center gap-6">
     <StatCard title="Total Users" value={usersCount?.totalUsers || "0"} />
     <StatCard title="Gold Users" value={usersCount?.goldUsers || "0"} />
     <StatCard title="Total Posts" value={"" + totalPostsCount} />
@@ -68,7 +68,7 @@ const DashboardHome = () => {
     <StatCard title="Reported Comments" value={totalCommentsCount?.totalReportedComments} />
   </div>
 
-  const User = <div className="flex flex-wrap justify-center items-center gap-6">
+  const User = <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 justify-center items-center gap-6">
     <StatCard title="Total Posts" value={"" + postsCount} />
     <StatCard title="User Status" value={userRole && userRole[0]?.toUpperCase() + userRole?.slice(1)} />
     <StatCard title="Total Comments" value={"" + commentsCount} />

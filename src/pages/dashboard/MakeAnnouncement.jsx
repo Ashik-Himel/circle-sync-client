@@ -4,6 +4,8 @@ import useAxiosSecure from "../../hooks/useAxiosSecure";
 import Swal from "sweetalert2";
 import toast from "react-hot-toast";
 import { useForm } from "react-hook-form";
+import { AwesomeButton } from "react-awesome-button";
+import "react-awesome-button/dist/styles.css";
 
 const MakeAnnouncement = () => {
   const {user} = useUserContext();
@@ -64,7 +66,11 @@ const MakeAnnouncement = () => {
             <label className="block font-medium mb-2" htmlFor="title">Description</label>
             <textarea className="input w-full border-gray-300 py-3 mb-5 resize-none h-[100px]" {...register("description")} id="description" placeholder="Enter the announcement description" required></textarea>
 
-            <button className="btn btn-primary btn-block">Make Announcement</button>
+            <div className="text-center">
+              <button type="submit">
+                <AwesomeButton type="primary">Make Announcement</AwesomeButton>
+              </button>
+            </div>
           </form>
       </section>
     </div>

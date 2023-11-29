@@ -8,6 +8,8 @@ import Swal from "sweetalert2";
 import useAxiosSecure from "../../hooks/useAxiosSecure";
 import toast from "react-hot-toast";
 import PropTypes from 'prop-types';
+import { AwesomeButton } from "react-awesome-button";
+import "react-awesome-button/dist/styles.css";
 
 const CommentRow = ({comment, refetch}) => {
   const [feedback, setFeedback] = useState('Select');
@@ -120,8 +122,11 @@ const SinglePostAllComments = () => {
       </Helmet>
 
       <section>
-        <Link to="/dashboard/posts" className="btn btn-primary mb-4">
-          <IoArrowBack /> All Posts
+        <Link to="/dashboard/posts" className="mb-4">
+          <AwesomeButton type="primary">
+            <IoArrowBack />
+            <span className="ml-2">All Posts</span>
+          </AwesomeButton>
         </Link>
         <h2 className="text-3xl font-medium text-center mb-4 text-primary">{comments[0]?.postTitle} (Comments)</h2>
 
