@@ -1,7 +1,7 @@
 import { Helmet } from "react-helmet-async";
 import useAxiosPublic from "../hooks/useAxiosPublic";
 import { useQuery } from "@tanstack/react-query";
-import { Link, useParams } from "react-router-dom";
+import { Link, useLocation, useParams } from "react-router-dom";
 import LoadingComponent from "../components/shared/LoadingComponent";
 import { format } from "date-fns";
 import PostStateComponent from "../components/shared/PostStateComponent";
@@ -12,12 +12,15 @@ import { useState } from "react";
 import { FacebookIcon, FacebookShareButton, LinkedinIcon, LinkedinShareButton, TelegramIcon, TelegramShareButton, TwitterIcon, TwitterShareButton, WhatsappIcon, WhatsappShareButton } from "react-share";
 import { AwesomeButton } from "react-awesome-button";
 import "react-awesome-button/dist/styles.css";
+import useUserContext from "../hooks/useUserContext";
 
 const PostDetails = () => {
   const [showShareBox, setShowShareBox] = useState(false);
   const [commentState, setCommentState] = useState(true);
   const {id} = useParams();
   const axiosPublic = useAxiosPublic();
+  const {user} = useUserContext();
+  const {pathname} = useLocation();
 
   const {data: post = {}, isLoading, refetch: refetchPost} = useQuery({
     queryKey: ['posts', id],
@@ -88,29 +91,43 @@ const PostDetails = () => {
           </div>
 
           <div className="fixed inset-0 bg-black bg-opacity-60 z-50 p-6 justify-center items-center" style={showShareBox ? {display: 'flex'} : {display: "none"}}>
-            <div className="w-full max-w-[500px] bg-white rounded-lg px-6 py-10">
-              <div className="flex justify-between items-center gap-4 mb-6">
-                <h2 className="text-2xl font-medium text-primary">Share Post</h2>
-                <FaCircleXmark className="text-3xl select-none cursor-pointer" onClick={() => setShowShareBox(false)} />
+            {
+              user?.email ? <div className="w-full max-w-[500px] bg-white rounded-lg px-6 py-10">
+                <div className="flex justify-between items-center gap-4 mb-6">
+                  <h2 className="text-2xl font-medium text-primary">Share Post</h2>
+                  <FaCircleXmark className="text-3xl select-none cursor-pointer" onClick={() => setShowShareBox(false)} />
+                </div>
+                <div className="flex flex-wrap gap-4 items-center">
+                  <FacebookShareButton url={`https://circle-sync-1.web.app/posts/${id}`} onClick={() => setShowShareBox(false)}>
+                    <FacebookIcon size={40} round="true" />
+                  </FacebookShareButton>
+                  <WhatsappShareButton url={`https://circle-sync-1.web.app/posts/${id}`} onClick={() => setShowShareBox(false)}>
+                    <WhatsappIcon size={40} round="true" />
+                  </WhatsappShareButton>
+                  <TwitterShareButton url={`https://circle-sync-1.web.app/posts/${id}`} onClick={() => setShowShareBox(false)}>
+                    <TwitterIcon size={40} round="true" />
+                  </TwitterShareButton>
+                  <LinkedinShareButton url={`https://circle-sync-1.web.app/posts/${id}`} onClick={() => setShowShareBox(false)}>
+                    <LinkedinIcon size={40} round="true" />
+                  </LinkedinShareButton>
+                  <TelegramShareButton url={`https://circle-sync-1.web.app/posts/${id}`} onClick={() => setShowShareBox(false)}>
+                    <TelegramIcon size={40} round="true" />
+                  </TelegramShareButton>
+                </div>
+              </div> : <div className="w-full max-w-[500px] bg-white rounded-lg px-6 py-10">
+                <div className="text-center">
+                  <h2 className="text-2xl font-medium mb-4">Login to share post.</h2>
+                  <div className="flex justify-center items-center gap-4">
+                    <Link to='/login' state={{prevPath: pathname}} onClick={() => setShowShareBox(false)}>
+                      <AwesomeButton type="primary">Login</AwesomeButton>
+                    </Link>
+                    <div onClick={() => setShowShareBox(false)}>
+                      <AwesomeButton type="danger">Close</AwesomeButton>
+                    </div>
+                  </div>
+                </div>
               </div>
-              <div className="flex flex-wrap gap-4 items-center">
-                <FacebookShareButton url={`https://circle-sync-1.web.app/posts/${id}`} onClick={() => setShowShareBox(false)}>
-                  <FacebookIcon size={40} round="true" />
-                </FacebookShareButton>
-                <WhatsappShareButton url={`https://circle-sync-1.web.app/posts/${id}`} onClick={() => setShowShareBox(false)}>
-                  <WhatsappIcon size={40} round="true" />
-                </WhatsappShareButton>
-                <TwitterShareButton url={`https://circle-sync-1.web.app/posts/${id}`} onClick={() => setShowShareBox(false)}>
-                  <TwitterIcon size={40} round="true" />
-                </TwitterShareButton>
-                <LinkedinShareButton url={`https://circle-sync-1.web.app/posts/${id}`} onClick={() => setShowShareBox(false)}>
-                  <LinkedinIcon size={40} round="true" />
-                </LinkedinShareButton>
-                <TelegramShareButton url={`https://circle-sync-1.web.app/posts/${id}`} onClick={() => setShowShareBox(false)}>
-                  <TelegramIcon size={40} round="true" />
-                </TelegramShareButton>
-              </div>
-            </div>
+            }
           </div>
         </div>
       </section>

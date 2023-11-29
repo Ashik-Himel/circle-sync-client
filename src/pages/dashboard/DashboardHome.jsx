@@ -46,7 +46,7 @@ const DashboardHome = () => {
         const res = await axiosSecure(`/totalCommentsCount`);
         return res.data;
       }
-      return null;
+      return {};
     }
   })
   const {data: usersCount = {}} = useQuery({
@@ -56,22 +56,22 @@ const DashboardHome = () => {
         const res = await axiosSecure(`/usersCount`);
         return res.data;
       }
-      return null;
+      return {};
     }
   })
 
   const Admin = <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 justify-center items-center gap-6">
     <StatCard title="Total Users" value={usersCount?.totalUsers || "0"} />
     <StatCard title="Gold Users" value={usersCount?.goldUsers || "0"} />
-    <StatCard title="Total Posts" value={"" + totalPostsCount} />
-    <StatCard title="Total Comments" value={totalCommentsCount?.totalComments} />
-    <StatCard title="Reported Comments" value={totalCommentsCount?.totalReportedComments} />
+    <StatCard title="Total Posts" value={"" + totalPostsCount || "0"} />
+    <StatCard title="Total Comments" value={totalCommentsCount?.totalComments || "0"} />
+    <StatCard title="Reported Comments" value={totalCommentsCount?.totalReportedComments || "0"} />
   </div>
 
   const User = <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 justify-center items-center gap-6">
-    <StatCard title="Total Posts" value={"" + postsCount} />
-    <StatCard title="User Status" value={userRole && userRole[0]?.toUpperCase() + userRole?.slice(1)} />
-    <StatCard title="Total Comments" value={"" + commentsCount} />
+    <StatCard title="Total Posts" value={"" + postsCount || "0"} />
+    <StatCard title="User Status" value={userRole && userRole[0]?.toUpperCase() + userRole?.slice(1) || "Bronze"} />
+    <StatCard title="Total Comments" value={"" + commentsCount || 0} />
   </div>
 
   return (

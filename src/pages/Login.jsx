@@ -10,6 +10,8 @@ import useUserContext from "../hooks/useUserContext";
 import useAxiosPublic from "../hooks/useAxiosPublic";
 import Swal from "sweetalert2";
 import { useForm } from "react-hook-form";
+import { AwesomeButton } from "react-awesome-button";
+import "react-awesome-button/dist/styles.css";
 
 const Login = () => {
   const [showEye, setShowEye] = useState(true);
@@ -84,7 +86,9 @@ const Login = () => {
               }
             </div>
 
-            <button className="btn btn-primary btn-block mt-6" type="submit">Login</button>
+            <div className="mt-6 text-center">
+              <AwesomeButton type="primary">Login</AwesomeButton>
+            </div>
             <p className="mt-4">Don&apos;t have an account? <Link to='/register' className="text-primary font-medium" state={state}>Register Now</Link></p>
             <div className="divider py-4">OR</div>
             <button type="button" className="w-full border-2 border-black rounded-full flex justify-center items-center gap-4 py-2 px-4 font-medium" onClick={googleLogin}>

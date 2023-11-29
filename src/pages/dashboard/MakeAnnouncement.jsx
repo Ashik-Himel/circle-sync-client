@@ -67,9 +67,7 @@ const MakeAnnouncement = () => {
             <textarea className="input w-full border-gray-300 py-3 mb-5 resize-none h-[100px]" {...register("description")} id="description" placeholder="Enter the announcement description" required></textarea>
 
             <div className="text-center">
-              <button type="submit">
-                <AwesomeButton type="primary">Make Announcement</AwesomeButton>
-              </button>
+              <AwesomeButton type="primary">Make Announcement</AwesomeButton>
             </div>
           </form>
       </section>

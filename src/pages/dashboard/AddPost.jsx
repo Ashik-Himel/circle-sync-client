@@ -135,9 +135,7 @@ const AddPost = () => {
             </div>
 
             <div className="text-center">
-              <button type="submit">
-                <AwesomeButton type="primary">Add Post</AwesomeButton>
-              </button>
+              <AwesomeButton type="primary" disabled={!selectedTag}>Add Post</AwesomeButton>
             </div>
           </form>
         }

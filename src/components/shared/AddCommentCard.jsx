@@ -51,10 +51,8 @@ const AddCommentCard = ({postTitle, postId, postAuthorEmail, refetch, commentSta
 
   return (
     <form className="mt-8" onSubmit={handleSubmit(onSubmit)}>
-      <textarea className="textarea w-full resize-none border-2 border-gray-300" {...register("comment")} id="comment" placeholder="Write a comment" required></textarea>
-      <button className="mt-2" type="submit">
-        <AwesomeButton type="primary">Comment</AwesomeButton>
-      </button>
+      <textarea className="textarea w-full resize-none border-2 border-gray-300 mb-2" {...register("comment")} id="comment" placeholder="Write a comment" required></textarea>
+      <AwesomeButton type="primary">Comment</AwesomeButton>
     </form>
   );
 };

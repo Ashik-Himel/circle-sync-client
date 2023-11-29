@@ -102,17 +102,15 @@ const AdminProfile = () => {
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mt-10">
           <StatCard title="Total Users" value={"" + usersCount?.totalUsers || "0"} />
-          <StatCard title="Total Posts" value={"" + totalPostsCount} />
-          <StatCard title="Total Comments" value={"" + totalCommentsCount?.totalComments} />
+          <StatCard title="Total Posts" value={"" + totalPostsCount || "0"} />
+          <StatCard title="Total Comments" value={"" + totalCommentsCount?.totalComments || "0"} />
         </div>
 
         <div className="my-10">
           <h3 className="text-3xl font-medium text-primary mb-4">Add Tags:</h3>
           <form className="flex justify-center gap-4 max-w-[500px] mx-auto" onSubmit={handleSubmit(onSubmit)}>
           <input className="flex-1 w-full input border-2 border-gray-300" type="text" {...register("tag")} id="tag" placeholder="Add tag with single word" required />
-            <button type="submit">
-              <AwesomeButton type="primary">Add</AwesomeButton>
-            </button>
+          <AwesomeButton type="primary">Add</AwesomeButton>
           </form>
         </div>
       </section>

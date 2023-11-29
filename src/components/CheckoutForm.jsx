@@ -4,6 +4,8 @@ import { useEffect, useState } from "react";
 import useAxiosSecure from "../hooks/useAxiosSecure";
 import useUserContext from "../hooks/useUserContext";
 import Swal from "sweetalert2";
+import { AwesomeButton } from "react-awesome-button";
+import "react-awesome-button/dist/styles.css";
 
 const CheckoutForm = ({amount}) => {
   const {user, setUserRole} = useUserContext();
@@ -86,13 +88,13 @@ const CheckoutForm = ({amount}) => {
 
   return (
     <form onSubmit={handleSubmit}>
-      <div className="border-2 border-gray-300 px-4 py-3 rounded-lg bg-white">
+      <div className="border-2 border-gray-300 px-4 py-3 rounded-lg bg-white mb-4">
         <CardElement options={options} />
       </div>
       {
-        errorMsg && <p className="font-medium text-red-600 mt-4 text-left">{errorMsg}</p>
+        errorMsg && <p className="font-medium text-red-600 mb-4 text-left">{errorMsg}</p>
       }
-      <button type="submit" className="btn btn-primary mt-4" disabled={!stripe || !elements || !clientSecret}>Pay</button>
+      <AwesomeButton type="primary" disabled={!stripe || elements || !clientSecret}>Pay</AwesomeButton>
     </form>
   );
 };
