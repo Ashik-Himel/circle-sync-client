@@ -9,6 +9,8 @@ import { signOut } from 'firebase/auth';
 import { auth } from '../firebase.config';
 import toast from 'react-hot-toast';
 import useAxiosSecure from '../hooks/useAxiosSecure';
+import { AwesomeButton } from 'react-awesome-button';
+import 'react-awesome-button/dist/styles.css';
 
 const Header = () => {
   const {user, userLoaded} = useUserContext();
@@ -75,8 +77,12 @@ const Header = () => {
                     <img className="w-20 h-20 rounded-full mb-4 z-20" src={user?.photoURL} alt="User's Photo" />
                     <span className="text-[18px] font-medium mb-1 text-center">{user?.displayName}</span>
                     <div className='flex justify-center items-center gap-2 mt-4'>
-                      <Link to='/dashboard/stat' className='btn btn-primary' onClick={() => setProfileShow(false)}>Dashboard</Link>
-                      <button className="btn btn-error text-white" onClick={() => {handleLogout(), setProfileShow(false)}}>Logout</button>
+                      <Link to='/dashboard/stat' onClick={() => setProfileShow(false)}>
+                        <AwesomeButton type="primary">Dashboard</AwesomeButton>
+                      </Link>
+                      <div onClick={() => {handleLogout(), setProfileShow(false)}}>
+                        <AwesomeButton type="danger">Logout</AwesomeButton>
+                      </div>
                     </div>
                   </div>
                 </div> : <Link className='btn btn-primary text-sm sm:text-base' to='/login'>Join Us</Link> : <div>

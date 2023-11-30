@@ -15,7 +15,7 @@ const ReportedComments = () => {
     }
   })
 
-  const {data: reportedCommentsCount = 0, isLoading: isLoading2} = useQuery({
+  const {data: reportedCommentsCount = 0, isLoading: isLoading2, refetch: refetch2} = useQuery({
     queryKey: ['reportedCommentsCount'],
     queryFn: async() => {
       const res = await axiosSecure(`/reportedCommentsCount`);
@@ -23,12 +23,16 @@ const ReportedComments = () => {
     }
   })
 
-  let pageTrack = [];
-  if (!isLoading2) {
-    for (let i = 1; i <= Math.ceil(reportedCommentsCount / 10); i++) {
-      pageTrack.push(i);
+  const [pageTrack, setPageTrack] = useState([]);
+  useEffect(() => {
+    const arr = [];
+    if (!isLoading2) {
+      for (let i = 1; i <= Math.ceil(reportedCommentsCount / 10); i++) {
+        arr.push(i);
+      }
+      setPageTrack(arr);
     }
-  }
+  }, [isLoading2, reportedCommentsCount])
 
   useEffect(() => {
     refetch();
@@ -54,6 +58,7 @@ const ReportedComments = () => {
                 icon: "success"
               });
               refetch();
+              refetch2();
             }
           })
       }
@@ -79,6 +84,7 @@ const ReportedComments = () => {
                 icon: "success"
               });
               refetch();
+              refetch2()
             }
           })
       }

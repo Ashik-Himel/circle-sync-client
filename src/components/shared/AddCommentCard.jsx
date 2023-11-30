@@ -44,8 +44,10 @@ const AddCommentCard = ({postTitle, postId, postAuthorEmail, refetch, commentSta
   if (!userLoaded) return <LoadingComponent />
   else if (!user) return (
     <div className="text-center py-8">
-      <span className="block mb-2 text-xl font-medium">Login to add comment.</span>
-      <Link className="btn btn-primary" to='/login' state={{prevPath: pathname}}>Login</Link>
+      <span className="block mb-4 text-xl font-medium">Login to add comment.</span>
+      <Link to='/login' state={{prevPath: pathname}}>
+        <AwesomeButton type="primary">Login</AwesomeButton>
+      </Link>
     </div>
   );
 

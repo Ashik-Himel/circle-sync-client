@@ -88,6 +88,14 @@ const SinglePostAllComments = () => {
   const {id: postId} = useParams();
   const axiosPublic = useAxiosPublic();
   const axiosSecure = useAxiosSecure();
+
+  const {data: post = ""} = useQuery({
+    queryKey: ["posts", postId],
+    queryFn: async() => {
+      const res = await axiosPublic(`/posts/${postId}`);
+      return res.data;
+    }
+  })
   const {data: comments = [], refetch} = useQuery({
     queryKey: ['comments', postId],
     queryFn: async() => {
@@ -95,7 +103,6 @@ const SinglePostAllComments = () => {
       return res.data;
     }
   })
-
   const {data: postCommentsCount, isLoading: isLoading2} = useQuery({
     queryKey: ['postCommentsCount', postId],
     queryFn: async() => {
@@ -122,13 +129,13 @@ const SinglePostAllComments = () => {
       </Helmet>
 
       <section>
-        <Link to="/dashboard/posts" className="mb-4">
+        <Link to="/dashboard/posts" className="block mb-4">
           <AwesomeButton type="primary">
             <IoArrowBack />
             <span className="ml-2">All Posts</span>
           </AwesomeButton>
         </Link>
-        <h2 className="text-3xl font-medium text-center mb-4 text-primary">{comments[0]?.postTitle} (Comments)</h2>
+        <h2 className="text-2xl font-medium text-center mb-4 text-primary">{post?.title} :: Comments</h2>
 
         <div className="overflow-x-auto">
           <table className="border border-black [&_th]:border [&_th]:border-black [&_td]:border [&_td]:border-black [&_th]:px-4 [&_th]:py-2 [&_th]:bg-primary [&_th]:text-white [&_td]:px-4 [&_td]:py-2 min-w-[650px] w-full max-w-[900px] mx-auto text-center">

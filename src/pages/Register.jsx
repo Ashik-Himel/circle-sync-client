@@ -10,8 +10,6 @@ import googleIcon from '../assets/images/google.png';
 import useAxiosPublic from "../hooks/useAxiosPublic";
 import Swal from "sweetalert2";
 import { useForm } from "react-hook-form";
-import { AwesomeButton } from "react-awesome-button";
-import "react-awesome-button/dist/styles.css";
 
 const Register = () => {
   const {setUser, setUserRole} = useUserContext();
@@ -137,9 +135,7 @@ const Register = () => {
                 <label htmlFor="terms_and_conditions">Accept <Link className="text-primary font-medium">Terms and Conditions</Link></label>
               </div>
 
-            <div className="mt-5 text-center">
-              <AwesomeButton type="primary" disabled={!isActive}>Register</AwesomeButton>
-            </div>
+            <button type="submit" className="btn btn-primary btn-block mt-5" disabled={!isActive}>Register</button>
             </form>
             <p className="mt-4">Already have an account? <Link to='/login' className="text-primary font-medium" state={state}>Login</Link></p>
 

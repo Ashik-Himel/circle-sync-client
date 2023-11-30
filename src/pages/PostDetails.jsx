@@ -32,7 +32,7 @@ const PostDetails = () => {
   const {data: comments = [], refetch} = useQuery({
     queryKey: ['comments', id],
     queryFn: async() => {
-      const res = await axiosPublic(`/comments/${id}`);
+      const res = await axiosPublic(`/comments/${id}?all=true`);
       return res.data;
     }
   })

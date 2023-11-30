@@ -18,7 +18,7 @@ const UsersPost = () => {
       return res.data;
     }
   })
-  const {data: userPostsCount, isLoading: isLoading2} = useQuery({
+  const {data: userPostsCount, isLoading: isLoading2, refetch: refetch2} = useQuery({
     queryKey: ['postsCount'],
     queryFn: async() => {
       const res = await axiosSecure(`/postsCount?email=${user?.email}`);
@@ -46,18 +46,23 @@ const UsersPost = () => {
                 icon: "success"
               });
               refetch();
+              refetch2();
             }
           })
       }
     });
   }
 
-  let pageTrack = [];
-  if (!isLoading2) {
-    for (let i = 1; i <= Math.ceil(userPostsCount / 10); i++) {
-      pageTrack.push(i);
+  const [pageTrack, setPageTrack] = useState([]);
+  useEffect(() => {
+    const arr = [];
+    if (!isLoading2) {
+      for (let i = 1; i <= Math.ceil(userPostsCount / 10); i++) {
+        arr.push(i);
+      }
+      setPageTrack(arr);
     }
-  }
+  }, [isLoading2, userPostsCount])
 
   useEffect(() => {
     refetch();
