@@ -37,9 +37,11 @@ const Banner = () => {
           <div className='bg-white w-full max-w-[500px] mx-auto rounded-lg shadow-xl mt-2 absolute max-h-[200px] overflow-auto'>
           <div className='[&>*]:border-b [&>*]:border-gray-300 [&>*:last-child]:border-none'>
             {
-              searchedPosts?.map(post => <Link to={`/posts/${post._id}`} className='block px-4 py-3 font-medium' key={post?._id}>
+              searchedPosts?.length ? searchedPosts?.map(post => <Link to={`/posts/${post._id}`} className='block px-4 py-3 font-medium' key={post?._id}>
                 <span>{post?.title}</span>
-              </Link>)
+              </Link>) : searchText && <div className='block px-4 py-3 font-medium'>
+                <span>No post matched with this tag!</span>
+              </div>
             }
           </div>
         </div>

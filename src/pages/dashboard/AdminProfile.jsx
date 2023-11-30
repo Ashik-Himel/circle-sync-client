@@ -11,7 +11,7 @@ import { useForm } from "react-hook-form";
 import { AwesomeButton } from "react-awesome-button";
 import "react-awesome-button/dist/styles.css";
 
-const StatCard = ({title, value}) => {
+const StatCard = ({title, value = 0}) => {
   return (
     <div className="inline-block [&>span]:block bg-primary text-white px-8 py-4 min-w-[200px] rounded-lg text-center">
       <span className="block mb-2">{title}</span>
@@ -26,21 +26,21 @@ const AdminProfile = () => {
   const axiosPublic = useAxiosPublic();
   const {register, handleSubmit, reset} = useForm();
 
-  const {data: usersCount = {}} = useQuery({
+  const {data: usersCount = 0} = useQuery({
     queryKey: ['usersCount'],
     queryFn: async() => {
       const res = await axiosSecure(`/usersCount`);
       return res.data;
     }
   })
-  const {data: totalPostsCount = "0"} = useQuery({
+  const {data: totalPostsCount = 0} = useQuery({
     queryKey: ['totalPostsCount'],
     queryFn: async() => {
       const res = await axiosPublic(`/totalPostsCount`);
       return res.data;
     }
   })
-  const {data: totalCommentsCount = {}} = useQuery({
+  const {data: totalCommentsCount = 0} = useQuery({
     queryKey: ['totalCommentsCount'],
     queryFn: async() => {
       const res = await axiosSecure(`/totalCommentsCount`);
@@ -50,9 +50,9 @@ const AdminProfile = () => {
 
   let data = [
     ["Title", "Value"],
-    ["Users", parseInt(usersCount?.totalUsers)],
+    ["Users", parseInt(usersCount)],
     ["Posts", parseInt(totalPostsCount)],
-    ["Comments", parseInt(totalCommentsCount?.totalComments)],
+    ["Comments", parseInt(totalCommentsCount)],
   ];
   const options = {
     legend: "none",
@@ -101,9 +101,9 @@ const AdminProfile = () => {
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mt-10">
-          <StatCard title="Total Users" value={"" + usersCount?.totalUsers || "0"} />
-          <StatCard title="Total Posts" value={"" + totalPostsCount || "0"} />
-          <StatCard title="Total Comments" value={"" + totalCommentsCount?.totalComments || "0"} />
+          <StatCard title="Total Users" value={usersCount} />
+          <StatCard title="Total Posts" value={totalPostsCount} />
+          <StatCard title="Total Comments" value={totalCommentsCount} />
         </div>
 
         <div className="my-10">
@@ -122,5 +122,5 @@ export default AdminProfile;
 
 StatCard.propTypes = {
   title: PropTypes.string,
-  value: PropTypes.string,
+  value: PropTypes.number,
 }

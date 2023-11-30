@@ -15,17 +15,17 @@ const ReportedComments = () => {
     }
   })
 
-  const {data: totalReportedComments, isLoading: isLoading2} = useQuery({
-    queryKey: ['totalReportedComments'],
+  const {data: reportedCommentsCount = 0, isLoading: isLoading2} = useQuery({
+    queryKey: ['reportedCommentsCount'],
     queryFn: async() => {
-      const res = await axiosSecure(`/totalCommentsCount`);
+      const res = await axiosSecure(`/reportedCommentsCount`);
       return res.data;
     }
   })
 
   let pageTrack = [];
   if (!isLoading2) {
-    for (let i = 1; i <= Math.ceil(totalReportedComments?.totalReportedComments / 10); i++) {
+    for (let i = 1; i <= Math.ceil(reportedCommentsCount / 10); i++) {
       pageTrack.push(i);
     }
   }
@@ -136,7 +136,7 @@ const ReportedComments = () => {
           <div>
             <nav className="flex justify-between items-center gap-4 py-3 flex-wrap">
               <div>
-                <span>Showing {Math.min(((page-1) * 10)+1, totalReportedComments?.totalReportedComments)}-{Math.min(page*10, totalReportedComments?.totalReportedComments)} of {totalReportedComments?.totalReportedComments}</span>
+                <span>Showing {Math.min(((page-1) * 10)+1, reportedCommentsCount)}-{Math.min(page*10, reportedCommentsCount)} of {reportedCommentsCount}</span>
               </div>
               <ul className="flex flex-wrap justify-center items-center -space-x-px text-sm">
                 <li>

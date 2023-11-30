@@ -3,19 +3,21 @@ import useAxiosSecure from "../../hooks/useAxiosSecure";
 import { useQuery } from "@tanstack/react-query";
 import Swal from "sweetalert2";
 import { useEffect, useState } from "react";
+import { IoSearch } from "react-icons/io5";
 
 const DashboardUsers = () => {
   const [page, setPage] = useState(1);
+  const [searchVal, setSearchVal] = useState('');
   const axiosSecure = useAxiosSecure();
-  const {data: users = [], refetch} = useQuery({
-    queryKey: ['users'],
+  const {data: users = [], isLoading, refetch} = useQuery({
+    queryKey: ['users', searchVal],
     queryFn: async() => {
-      const res = await axiosSecure(`/users?skip=${page-1}`)
+      const res = await axiosSecure(`/users?search=${searchVal}&skip=${page-1}`)
       return res.data;
     }
   })
 
-  const {data: usersCount, isLoading: isLoading2} = useQuery({
+  const {data: usersCount = 0, isLoading: isLoading2} = useQuery({
     queryKey: ['usersCount'],
     queryFn: async() => {
       const res = await axiosSecure(`/usersCount`);
@@ -25,7 +27,7 @@ const DashboardUsers = () => {
 
   let pageTrack = [];
   if (!isLoading2) {
-    for (let i = 1; i <= Math.ceil(usersCount?.totalUsers / 10); i++) {
+    for (let i = 1; i <= Math.ceil(usersCount / 10); i++) {
       pageTrack.push(i);
     }
   }
@@ -59,6 +61,11 @@ const DashboardUsers = () => {
       }
     });
   }
+  const handleOnChange = e => {
+    const value = e.target.value;
+    setSearchVal(value);
+    refetch();
+  }
 
   return (
     <div>
@@ -68,6 +75,10 @@ const DashboardUsers = () => {
 
       <section>
         <h2 className="text-3xl font-medium text-center mb-4 text-primary">All Users</h2>
+        <div className='w-full max-w-[500px] mx-auto relative mb-4'>
+          <input className='input w-full pr-12 border-2 border-gray-300 bg-gray-50' type="search" name="search" id="search" placeholder='Search by tag' onChange={handleOnChange} />
+          <IoSearch className='absolute right-4 top-1/2 -translate-y-1/2 text-2xl' />
+        </div>
 
         <div className="overflow-x-auto">
           <table className="border border-black [&_th]:border [&_th]:border-black [&_td]:border [&_td]:border-black [&_th]:px-4 [&_th]:py-2 [&_th]:bg-primary [&_th]:text-white [&_td]:px-4 [&_td]:py-2 min-w-[650px] w-full max-w-[900px] mx-auto text-center">
@@ -81,14 +92,20 @@ const DashboardUsers = () => {
             </thead>
             <tbody>
               {
-                users?.map(user => <tr key={user._id}>
+                !isLoading ? users?.map(user => <tr key={user._id}>
                   <td>{user?.name}</td>
                   <td>{user?.email}</td>
                   <td className={user?.role === 'admin' ? "font-semibold text-primary" : user?.role === 'gold' ? "font-semibold text-yellow-500" : "font-semibold"}>{user?.role === 'admin' ? user?.role[0].toUpperCase() + user?.role?.slice(1) : user?.role[0].toUpperCase() + user?.role?.slice(1) + " Member"}</td>
                   <td className="min-w-[170px]">
                     <button className="btn btn-primary min-h-[32px] py-1" disabled={user?.role === 'admin' ? 'disabled' : ''} onClick={() => handleMakeAdmin(user?._id)}>{user?.role === 'admin' ? "Admin" : "Make Admin"}</button>
                   </td>
-                </tr>)
+                </tr>) : <tr>
+                  <td colSpan='4'>
+                    <div className="my-1 text-center">
+                      <span className="loading loading-spinner loading-md text-primary"></span>
+                    </div>
+                  </td>
+                </tr>
               }
             </tbody>
           </table>
@@ -98,7 +115,7 @@ const DashboardUsers = () => {
           <div>
             <nav className="flex justify-between items-center gap-4 py-3 flex-wrap">
               <div>
-                <span>Showing {Math.min(((page-1) * 10)+1, usersCount?.totalUsers)}-{Math.min(page*10, usersCount?.totalUsers)} of {usersCount?.totalUsers}</span>
+                <span>Showing {Math.min(((page-1) * 10)+1, usersCount)}-{Math.min(page*10, usersCount)} of {usersCount}</span>
               </div>
               <ul className="flex flex-wrap justify-center items-center -space-x-px text-sm">
                 <li>
