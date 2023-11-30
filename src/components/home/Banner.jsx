@@ -9,7 +9,7 @@ const Banner = () => {
   const [searchText, setSearchText] = useState('');
   const axiosPublic = useAxiosPublic();
 
-  const {data: searchedPosts = [], refetch} = useQuery({
+  const {data: searchedPosts = [], isLoading, refetch} = useQuery({
     queryKey: ["taggedPosts", searchText],
     queryFn: async() => {
       const res = await axiosPublic(`taggedPosts?tag=${searchText}`);
@@ -37,10 +37,12 @@ const Banner = () => {
           <div className='bg-white w-full max-w-[500px] mx-auto rounded-lg shadow-xl mt-2 absolute max-h-[200px] overflow-auto'>
           <div className='[&>*]:border-b [&>*]:border-gray-300 [&>*:last-child]:border-none'>
             {
-              searchedPosts?.length ? searchedPosts?.map(post => <Link to={`/posts/${post._id}`} className='block px-4 py-3 font-medium' key={post?._id}>
+              !isLoading ? searchedPosts?.length ? searchedPosts?.map(post => <Link to={`/posts/${post._id}`} className='block px-4 py-3 font-medium' key={post?._id}>
                 <span>{post?.title}</span>
               </Link>) : searchText && <div className='block px-4 py-3 font-medium'>
                 <span>No post matched with this tag!</span>
+              </div> : searchText && <div className='block px-4 py-3 font-medium text-center'>
+              <span className="loading loading-spinner loading-md text-primary"></span>
               </div>
             }
           </div>
